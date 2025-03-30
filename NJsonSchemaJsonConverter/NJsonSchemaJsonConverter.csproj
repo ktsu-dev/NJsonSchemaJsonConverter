@@ -3,7 +3,7 @@
     <NoWarn>$(NoWarn);CA1810;S2743;S3963;</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ktsu.Extensions" Version="1.4.0" />
-    <PackageReference Include="NJsonSchema" Version="11.1.0" />
+    <PackageReference Include="ktsu.Extensions" Version="1.5.0" />
+    <PackageReference Include="NJsonSchema" Version="11.2.0" />
   </ItemGroup>
 </Project>
