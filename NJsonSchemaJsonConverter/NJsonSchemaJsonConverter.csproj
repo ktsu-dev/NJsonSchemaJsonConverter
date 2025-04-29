@@ -4,6 +4,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ktsu.Extensions" Version="1.5.2" />
-    <PackageReference Include="NJsonSchema" Version="11.2.0" />
+    <PackageReference Include="NJsonSchema" Version="11.3.2" />
   </ItemGroup>
 </Project>
