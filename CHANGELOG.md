@@ -1,3 +1,8 @@
+## v1.0.1-pre.1 (prerelease)
+
+Changes since v1.0.0:
+
+- Sync scripts\PSBuild.psm1 ([@ktsu[bot]](https://github.com/ktsu[bot]))
 ## v1.0.0 (patch)
 
 Changes since v1.0.0-pre.19:
