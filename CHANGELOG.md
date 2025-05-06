@@ -1,6 +1,11 @@
+## v1.0.1-pre.4 (prerelease)
+
+Changes since v1.0.1-pre.3:
+
+- Bump ktsu.Extensions from 1.5.2 to 1.5.3 in the ktsu group ([@dependabot[bot]](https://github.com/dependabot[bot]))
 ## v1.0.1-pre.3 (prerelease)
 
-Incremental prerelease update.
+Changes since v1.0.1-pre.2:
 ## v1.0.1-pre.2 (prerelease)
 
 Changes since v1.0.1-pre.1:
