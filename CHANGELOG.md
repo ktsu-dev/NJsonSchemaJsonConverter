@@ -9,6 +9,17 @@ Changes since v1.0.1-pre.15:
 - Add automation scripts for metadata generation and project management ([@matt-edmondson](https://github.com/matt-edmondson))
 - Remove obsolete build configuration files and scripts, including Directory.Build.props, Directory.Build.targets, and various PowerShell scripts for metadata and version management. Add copyright information to NJsonSchemaJsonConverter.cs. ([@matt-edmondson](https://github.com/matt-edmondson))
 - Add mailmap ([@matt-edmondson](https://github.com/matt-edmondson))
+## v1.0.1-pre.16 (prerelease)
+
+Changes since v1.0.1-pre.15:
+
+- Initial commit ([@matt-edmondson](https://github.com/matt-edmondson))
+- Update project SDK to ktsu.Sdk.Lib version 1.8.0 ([@matt-edmondson](https://github.com/matt-edmondson))
+- Add LICENSE template ([@matt-edmondson](https://github.com/matt-edmondson))
+- Update packages ([@matt-edmondson](https://github.com/matt-edmondson))
+- Add automation scripts for metadata generation and project management ([@matt-edmondson](https://github.com/matt-edmondson))
+- Remove obsolete build configuration files and scripts, including Directory.Build.props, Directory.Build.targets, and various PowerShell scripts for metadata and version management. Add copyright information to NJsonSchemaJsonConverter.cs. ([@matt-edmondson](https://github.com/matt-edmondson))
+- Add mailmap ([@matt-edmondson](https://github.com/matt-edmondson))
 ## v1.0.1-pre.15 (prerelease)
 
 Changes since v1.0.1-pre.14:
