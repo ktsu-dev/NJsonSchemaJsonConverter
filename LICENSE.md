@@ -1,6 +1,6 @@
 MIT License
 
-https://github.com/ktsu-dev/ktsu-dev/NJsonSchemaJsonConverter
+https://github.com/ktsu-dev/NJsonSchemaJsonConverter
 
 Copyright (c) 2023-2025 ktsu-dev
 
