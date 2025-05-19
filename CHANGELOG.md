@@ -1,6 +1,6 @@
-## v1.0.1-pre.16 (prerelease)
+## v1.0.1-pre.17 (prerelease)
 
-Changes since v1.0.1-pre.15:
+Changes since v1.0.1-pre.16:
 
 - Initial commit ([@matt-edmondson](https://github.com/matt-edmondson))
 - Update project SDK to ktsu.Sdk.Lib version 1.8.0 ([@matt-edmondson](https://github.com/matt-edmondson))
