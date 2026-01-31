@@ -1,3 +1,6 @@
+## v1.0.1
+
+No significant changes detected since v1.0.1.
 ## v1.0.1 (patch)
 
 Changes since v1.0.0:
@@ -76,9 +79,7 @@ Changes since v1.0.1-pre.2:
 Changes since v1.0.1-pre.1:
 ## v1.0.1-pre.1 (prerelease)
 
-Changes since v1.0.0:
-
-- Sync scripts\PSBuild.psm1 ([@ktsu[bot]](https://github.com/ktsu[bot]))
+Incremental prerelease update.
 ## v1.0.0 (patch)
 
 Changes since v1.0.0-pre.19:
