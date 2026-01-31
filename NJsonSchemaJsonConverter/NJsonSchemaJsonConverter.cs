@@ -4,6 +4,7 @@
 
 namespace ktsu.NJsonSchemaJsonConverter;
 
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -21,7 +22,7 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 	/// <returns>True if the type can be converted; otherwise, false.</returns>
 	public override bool CanConvert(Type typeToConvert)
 	{
-		ArgumentNullException.ThrowIfNull(typeToConvert);
+		Ensure.NotNull(typeToConvert);
 		return typeToConvert == typeof(JsonSchema) || typeToConvert.IsSubclassOf(typeof(JsonSchema));
 	}
 
@@ -33,8 +34,8 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 	/// <returns>A JSON converter for the specified type.</returns>
 	public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
 	{
-		ArgumentNullException.ThrowIfNull(typeToConvert);
-		var converterType = typeof(NJsonSchemaJsonConverter<>).MakeGenericType(typeToConvert);
+		Ensure.NotNull(typeToConvert);
+		Type converterType = typeof(NJsonSchemaJsonConverter<>).MakeGenericType(typeToConvert);
 		return (JsonConverter)Activator.CreateInstance(converterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: null, culture: null)!;
 	}
 
@@ -42,6 +43,7 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 	/// A JSON converter for NJsonSchema types.
 	/// </summary>
 	/// <typeparam name="T">The type of the object to convert.</typeparam>
+	[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated via reflection in CreateConverter")]
 	private sealed class NJsonSchemaJsonConverter<T> : JsonConverter<T>
 	{
 		/// <summary>
@@ -53,9 +55,9 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 		/// <returns>The converted value.</returns>
 		public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 		{
-			ArgumentNullException.ThrowIfNull(typeToConvert);
+			Ensure.NotNull(typeToConvert);
 			return reader.TokenType == JsonTokenType.String
-				? (T)(object)JsonSchema.FromJsonAsync(reader.ValueSequence.ToString()).Result
+				? (T)(object)JsonSchema.FromJsonAsync(reader.GetString()!).Result
 				: throw new JsonException();
 		}
 
@@ -67,8 +69,10 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 		/// <param name="options">Options to control the behavior during serialization and deserialization.</param>
 		public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
 		{
+#pragma warning disable KTSU0003
 			ArgumentNullException.ThrowIfNull(value);
-			ArgumentNullException.ThrowIfNull(writer);
+#pragma warning restore KTSU0003
+			Ensure.NotNull(writer);
 			writer.WriteRawValue(((JsonSchema)(object)value).ToJson());
 		}
 	}

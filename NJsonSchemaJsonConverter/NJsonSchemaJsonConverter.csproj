@@ -1,9 +1,12 @@
-<Project Sdk="ktsu.Sdk.Lib/1.8.0">
+<Project Sdk="Microsoft.NET.Sdk">
+  <Sdk Name="ktsu.Sdk" />
+
   <PropertyGroup>
-    <NoWarn>$(NoWarn);CA1810;S2743;S3963;</NoWarn>
+    <TargetFrameworks>net8.0;net9.0;net10.0;</TargetFrameworks>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="ktsu.Extensions" Version="1.5.9" />
-    <PackageReference Include="NJsonSchema" Version="11.5.2" />
+    <PackageReference Include="NJsonSchema" />
+    <PackageReference Include="Polyfill" />
   </ItemGroup>
 </Project>
