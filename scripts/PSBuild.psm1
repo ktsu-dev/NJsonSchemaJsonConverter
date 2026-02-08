@@ -1214,9 +1214,13 @@ function Update-ProjectMetadata {
     .DESCRIPTION
         Generates and updates version information, license, changelog, and other metadata files for a project.
         This function centralizes all metadata generation to ensure consistency across project documentation.
+        
+        Metadata files are always generated, but commits and pushes are only performed in official repositories
+        (not forks). This is controlled by the BuildConfiguration.IsOfficial flag.
     .PARAMETER BuildConfiguration
         The build configuration object containing paths, version info, and GitHub details.
-        Should be obtained from Get-BuildConfiguration.
+        Should be obtained from Get-BuildConfiguration. The IsOfficial property determines whether
+        metadata changes will be committed and pushed.
     .PARAMETER Authors
         Optional array of author names to include in the AUTHORS.md file.
     .PARAMETER CommitMessage
@@ -1315,18 +1319,24 @@ function Update-ProjectMetadata {
         Write-Information "Current commit hash: $currentHash" -Tags "Update-ProjectMetadata"
 
         if (-not [string]::IsNullOrWhiteSpace($postStatus)) {
-            # Configure git user before committing
-            Set-GitIdentity | Write-InformationStream -Tags "Update-ProjectMetadata"
+            # Only commit and push metadata changes in official repositories
+            if ($BuildConfiguration.IsOfficial) {
+                # Configure git user before committing
+                Set-GitIdentity | Write-InformationStream -Tags "Update-ProjectMetadata"
 
-            Write-Information "Committing changes..." -Tags "Update-ProjectMetadata"
-            "git commit -m `"$CommitMessage`"" | Invoke-ExpressionWithLogging | Write-InformationStream -Tags "Update-ProjectMetadata"
+                Write-Information "Committing changes..." -Tags "Update-ProjectMetadata"
+                "git commit -m `"$CommitMessage`"" | Invoke-ExpressionWithLogging | Write-InformationStream -Tags "Update-ProjectMetadata"
 
-            Write-Information "Pushing changes..." -Tags "Update-ProjectMetadata"
-            "git push" | Invoke-ExpressionWithLogging | Write-InformationStream -Tags "Update-ProjectMetadata"
+                Write-Information "Pushing changes..." -Tags "Update-ProjectMetadata"
+                "git push" | Invoke-ExpressionWithLogging | Write-InformationStream -Tags "Update-ProjectMetadata"
 
-            Write-Information "Getting release hash..." -Tags "Update-ProjectMetadata"
-            $releaseHash = "git rev-parse HEAD" | Invoke-ExpressionWithLogging
-            Write-Information "Metadata committed as $releaseHash" -Tags "Update-ProjectMetadata"
+                Write-Information "Getting release hash..." -Tags "Update-ProjectMetadata"
+                $releaseHash = "git rev-parse HEAD" | Invoke-ExpressionWithLogging
+                Write-Information "Metadata committed as $releaseHash" -Tags "Update-ProjectMetadata"
+            } else {
+                Write-Information "Skipping metadata commit/push (not an official repository)" -Tags "Update-ProjectMetadata"
+                $releaseHash = $currentHash
+            }
 
             Write-Information "Metadata update completed successfully with changes" -Tags "Update-ProjectMetadata"
             Write-Information "Version: $version" -Tags "Update-ProjectMetadata"
@@ -1529,8 +1539,14 @@ function Invoke-DotNetPack {
     # Ensure output directory exists
     New-Item -Path $OutputPath -ItemType Directory -Force | Write-InformationStream -Tags "Invoke-DotNetPack"
 
-    # Check if any projects exist
-    $projectFiles = @(Get-ChildItem -Recurse -Filter *.csproj -ErrorAction SilentlyContinue)
+    # Check if any projects exist (excluding test projects)
+    $projectFiles = @(Get-ChildItem -Recurse -Filter *.csproj -ErrorAction SilentlyContinue | Where-Object {
+        -not ($_.Name -match "\.Tests?\.csproj$" -or
+              $_.Directory.Name -match "\.Tests?$" -or
+              $_.Directory.Name -eq "Tests" -or
+              $_.Directory.Name -eq "Test" -or
+              (Select-String -Path $_.FullName -Pattern "<IsTestProject>true</IsTestProject>" -Quiet))
+    })
     if ($projectFiles.Count -eq 0) {
         Write-Information "No .NET library projects found to package" -Tags "Invoke-DotNetPack"
         return
@@ -1553,21 +1569,23 @@ function Invoke-DotNetPack {
             Write-Information "No latest changelog found, SDK will use full CHANGELOG.md (automatically truncated if needed)" -Tags "Invoke-DotNetPack"
         }
 
-        # Build either a specific project or all projects
+        # Build either a specific project or all non-test projects
         if ([string]::IsNullOrWhiteSpace($Project)) {
-            Write-Information "Packaging all projects in solution..." -Tags "Invoke-DotNetPack"
-            "dotnet pack --configuration $Configuration -logger:`"Microsoft.Build.Logging.ConsoleLogger,Microsoft.Build;Summary;ForceNoAlign;ShowTimestamp;ShowCommandLine;Verbosity=quiet`" --no-build --output $OutputPath $releaseNotesProperty" | Invoke-ExpressionWithLogging | Write-InformationStream -Tags "Invoke-DotNetPack"
+            Write-Information "Packaging $($projectFiles.Count) non-test projects..." -Tags "Invoke-DotNetPack"
+            foreach ($proj in $projectFiles) {
+                $projName = [System.IO.Path]::GetFileNameWithoutExtension($proj)
+                Write-Information "Packaging project: $projName" -Tags "Invoke-DotNetPack"
+                "dotnet pack `"$proj`" --configuration $Configuration -logger:`"Microsoft.Build.Logging.ConsoleLogger,Microsoft.Build;Summary;ForceNoAlign;ShowTimestamp;ShowCommandLine;Verbosity=quiet`" --no-build --output $OutputPath $releaseNotesProperty" | Invoke-ExpressionWithLogging | Write-InformationStream -Tags "Invoke-DotNetPack"
+                if ($LASTEXITCODE -ne 0) {
+                    throw "Library packaging failed for $projName with exit code $LASTEXITCODE"
+                }
+            }
         } else {
             Write-Information "Packaging project: $Project" -Tags "Invoke-DotNetPack"
             "dotnet pack $Project --configuration $Configuration -logger:`"Microsoft.Build.Logging.ConsoleLogger,Microsoft.Build;Summary;ForceNoAlign;ShowTimestamp;ShowCommandLine;Verbosity=quiet`" --no-build --output $OutputPath $releaseNotesProperty" | Invoke-ExpressionWithLogging | Write-InformationStream -Tags "Invoke-DotNetPack"
-        }
-
-        if ($LASTEXITCODE -ne 0) {
-            # Get more details about what might have failed
-            Write-Information "Packaging failed with exit code $LASTEXITCODE, trying again with quiet verbosity..." -Tags "Invoke-DotNetPack"
-            "dotnet pack --configuration $Configuration -logger:`"Microsoft.Build.Logging.ConsoleLogger,Microsoft.Build;Summary;ForceNoAlign;ShowTimestamp;ShowCommandLine;Verbosity=quiet`" --no-build --output $OutputPath $releaseNotesProperty" | Invoke-ExpressionWithLogging | Write-InformationStream -Tags "Invoke-DotNetPack"
-
-            throw "Library packaging failed with exit code $LASTEXITCODE"
+            if ($LASTEXITCODE -ne 0) {
+                throw "Library packaging failed with exit code $LASTEXITCODE"
+            }
         }
 
         # Report on created packages
@@ -1613,8 +1631,14 @@ function Invoke-DotNetPublish {
 
     Write-StepHeader "Publishing Applications" -Tags "Invoke-DotNetPublish"
 
-    # Find all projects
-    $projectFiles = @(Get-ChildItem -Recurse -Filter *.csproj -ErrorAction SilentlyContinue)
+    # Find all projects (excluding test projects)
+    $projectFiles = @(Get-ChildItem -Recurse -Filter *.csproj -ErrorAction SilentlyContinue | Where-Object {
+        -not ($_.Name -match "\.Tests?\.csproj$" -or
+              $_.Directory.Name -match "\.Tests?$" -or
+              $_.Directory.Name -eq "Tests" -or
+              $_.Directory.Name -eq "Test" -or
+              (Select-String -Path $_.FullName -Pattern "<IsTestProject>true</IsTestProject>" -Quiet))
+    })
     if ($projectFiles.Count -eq 0) {
         Write-Information "No .NET application projects found to publish" -Tags "Invoke-DotNetPublish"
         return
@@ -1652,7 +1676,8 @@ function Invoke-DotNetPublish {
             New-Item -Path $outDir -ItemType Directory -Force | Write-InformationStream -Tags "Invoke-DotNetPublish"
 
             # Publish application with optimized settings for both general use and winget compatibility
-            "dotnet publish `"$csproj`" --configuration $Configuration --runtime $arch --self-contained true --output `"$outDir`" -p:PublishSingleFile=true -p:PublishTrimmed=false -p:EnableCompressionInSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=none -p:DebugSymbols=false -logger:`"Microsoft.Build.Logging.ConsoleLogger,Microsoft.Build;Summary;ForceNoAlign;ShowTimestamp;ShowCommandLine;Verbosity=quiet`"" | Invoke-ExpressionWithLogging | Write-InformationStream -Tags "Invoke-DotNetPublish"
+            # Note: PublishSingleFile is disabled because Silk.NET native libraries (GLFW, SDL) don't bundle correctly
+            "dotnet publish `"$csproj`" --configuration $Configuration --runtime $arch --self-contained true --output `"$outDir`" -p:PublishSingleFile=false -p:PublishTrimmed=false -p:DebugType=none -p:DebugSymbols=false -logger:`"Microsoft.Build.Logging.ConsoleLogger,Microsoft.Build;Summary;ForceNoAlign;ShowTimestamp;ShowCommandLine;Verbosity=quiet`"" | Invoke-ExpressionWithLogging | Write-InformationStream -Tags "Invoke-DotNetPublish"
 
             if ($LASTEXITCODE -eq 0) {
                 # Create general application zip archive for all platforms
