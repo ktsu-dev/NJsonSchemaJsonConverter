@@ -7,6 +7,7 @@
 namespace ktsu.NJsonSchemaJsonConverter.Test;
 
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using NJsonSchema;
 
 [TestClass]
@@ -135,4 +136,100 @@ public class NJsonSchemaJsonConverterFactoryTests
 		_ = Assert.ThrowsExactly<JsonException>(() =>
 			JsonSerializer.Deserialize<JsonSchema>(json, SerializerOptions));
 	}
+
+	[TestMethod]
+	public void SerializeShouldWriteSchemaInlineInsideContainer()
+	{
+		// Arrange
+		JsonSchema schema = new()
+		{
+			Type = JsonObjectType.Object,
+		};
+		schema.Properties["id"] = new JsonSchemaProperty
+		{
+			Type = JsonObjectType.Integer,
+		};
+
+		SchemaContainer container = new()
+		{
+			Name = "TestSchema",
+			Schema = schema,
+		};
+
+		// Act
+		string json = JsonSerializer.Serialize(container, SerializerOptions);
+
+		// Assert - the container JSON should have the schema written inline
+		Assert.IsNotNull(json);
+		using JsonDocument doc = JsonDocument.Parse(json);
+		Assert.AreEqual("TestSchema", doc.RootElement.GetProperty("Name").GetString());
+		Assert.AreEqual(JsonValueKind.Object, doc.RootElement.GetProperty("Schema").ValueKind);
+	}
+
+	[TestMethod]
+	public void SerializeShouldHandleNullSchemaInContainer()
+	{
+		// Arrange
+		SchemaContainer container = new()
+		{
+			Name = "NoSchema",
+			Schema = null,
+		};
+
+		// Act
+		string json = JsonSerializer.Serialize(container, SerializerOptions);
+
+		// Assert
+		Assert.IsNotNull(json);
+		using JsonDocument doc = JsonDocument.Parse(json);
+		Assert.AreEqual("NoSchema", doc.RootElement.GetProperty("Name").GetString());
+		Assert.AreEqual(JsonValueKind.Null, doc.RootElement.GetProperty("Schema").ValueKind);
+	}
+
+	[TestMethod]
+	public void DeserializeShouldParseSchemaFromStringInContainer()
+	{
+		// Arrange - container where Schema is a JSON string containing schema JSON
+		string json = "{\"Name\":\"TestSchema\",\"Schema\":\"{\\\"type\\\":\\\"object\\\"}\"}";
+
+		// Act
+		SchemaContainer? deserialized = JsonSerializer.Deserialize<SchemaContainer>(json, SerializerOptions);
+
+		// Assert
+		Assert.IsNotNull(deserialized);
+		Assert.AreEqual("TestSchema", deserialized.Name);
+		Assert.IsNotNull(deserialized.Schema);
+		Assert.AreEqual(JsonObjectType.Object, deserialized.Schema.Type);
+	}
+
+	[TestMethod]
+	public void DeserializeShouldHandleNullSchemaInContainer()
+	{
+		// Arrange
+		string json = "{\"Name\":\"NoSchema\",\"Schema\":null}";
+
+		// Act
+		SchemaContainer? deserialized = JsonSerializer.Deserialize<SchemaContainer>(json, SerializerOptions);
+
+		// Assert
+		Assert.IsNotNull(deserialized);
+		Assert.AreEqual("NoSchema", deserialized.Name);
+		Assert.IsNull(deserialized.Schema);
+	}
+
+	[TestMethod]
+	public void CreateConverterShouldReturnConverterForJsonSchemaType()
+	{
+		// Act
+		JsonConverter converter = factory.CreateConverter(typeof(JsonSchema), SerializerOptions);
+
+		// Assert
+		Assert.IsNotNull(converter);
+	}
+}
+
+public class SchemaContainer
+{
+	public string Name { get; set; } = string.Empty;
+	public JsonSchema? Schema { get; set; }
 }
