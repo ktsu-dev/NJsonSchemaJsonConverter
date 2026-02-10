@@ -1,3 +1,6 @@
+## v1.0.2
+
+No significant changes detected since v1.0.2.
 ## v1.0.2 (patch)
 
 Changes since v1.0.1:
@@ -22,9 +25,7 @@ Changes since v1.0.2-pre.1:
 - Bump Polyfill from 9.8.0 to 9.8.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
 ## v1.0.2-pre.1 (prerelease)
 
-Changes since v1.0.1:
-
-- Bump Polyfill from 9.7.7 to 9.8.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+Incremental prerelease update.
 ## v1.0.1 (patch)
 
 Changes since v1.0.0:
