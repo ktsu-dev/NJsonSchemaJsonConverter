@@ -1,6 +1,6 @@
-## v1.0.13 (patch)
+## v1.0.14 (patch)
 
-Changes since v1.0.12:
+Changes since v1.0.13:
 
-- Bump MSTest.Sdk from 4.1.0 to 4.2.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump NJsonSchema from 11.5.2 to 11.6.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
