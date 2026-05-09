@@ -1,6 +1,6 @@
-## v1.0.20 (patch)
+## v1.0.21 (patch)
 
-Changes since v1.0.19:
+Changes since v1.0.20:
 
-- Bump Polyfill from 10.4.0 to 10.5.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Regenerate TAGS.md with NuGet package tags ([@matt-edmondson](https://github.com/matt-edmondson))
 
