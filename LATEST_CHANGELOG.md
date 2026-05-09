@@ -1,6 +1,4 @@
-## v1.0.21 (patch)
+## v1.0.21
 
-Changes since v1.0.20:
-
-- Regenerate TAGS.md with NuGet package tags ([@matt-edmondson](https://github.com/matt-edmondson))
+No significant changes detected since v1.0.21.
 
