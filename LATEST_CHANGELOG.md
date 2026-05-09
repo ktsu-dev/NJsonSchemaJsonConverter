@@ -1,5 +1,6 @@
-## v1.0.1 (patch)
+## v1.0.20 (patch)
 
-Changes since v1.0.0:
+Changes since v1.0.19:
 
-- Update configuration files and scripts for improved build and test processes ([@matt-edmondson](https://github.com/matt-edmondson))
+- Bump Polyfill from 10.4.0 to 10.5.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+

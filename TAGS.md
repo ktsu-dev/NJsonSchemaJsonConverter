@@ -1,0 +1,1 @@
+njsonschema;json schema;system text json;json converter factory;jsonconverter;serialization;deserialization;dotnet;csharp
