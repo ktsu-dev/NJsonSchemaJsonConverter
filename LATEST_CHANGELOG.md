@@ -1,7 +1,4 @@
-## v1.0.27 (patch)
+## v1.0.27
 
-Changes since v1.0.26:
-
-- Bump Polyfill from 10.8.0 to 10.8.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump the ktsu group with 3 updates ([@dependabot[bot]](https://github.com/dependabot[bot]))
+No significant changes detected since v1.0.27.
 
