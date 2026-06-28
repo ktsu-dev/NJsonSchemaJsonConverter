@@ -1,8 +1,7 @@
-## v1.0.29 (patch)
+## v1.0.30 (patch)
 
-Changes since v1.0.28:
+Changes since v1.0.29:
 
-- chore: trim unused centrally managed package versions ([@matt-edmondson](https://github.com/matt-edmondson))
-- Remove stale files ([@matt-edmondson](https://github.com/matt-edmondson))
-- Plan ([@matt-edmondson](https://github.com/matt-edmondson))
+- Sync .github\workflows\dotnet.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync global.json ([@ktsu[bot]](https://github.com/ktsu[bot]))
 
