@@ -11,6 +11,6 @@
     <PackageVersion Include="Microsoft.Testing.Extensions.Retry" Version="1.7.2" />
     <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="1.7.2" />
     <PackageVersion Include="NJsonSchema" Version="11.6.1" />
-    <PackageVersion Include="Polyfill" Version="10.11.0" />
+    <PackageVersion Include="Polyfill" Version="10.11.1" />
   </ItemGroup>
 </Project>
