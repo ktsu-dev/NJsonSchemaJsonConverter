@@ -2,6 +2,9 @@
 
 Changes since v1.0.33:
 
+- Sync .github\workflows\dotnet.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync .github\workflows\dependabot-merge.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync .gitattributes ([@ktsu[bot]](https://github.com/ktsu[bot]))
 - Bump MSTest.Sdk from 4.3.2 to 4.3.3 ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump the ktsu group with 8 updates ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump Polyfill from 11.0.0 to 11.0.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
@@ -285,58 +288,47 @@ Changes since v1.0.1-pre.15:
 
 ## v1.0.1-pre.15 (prerelease)
 
-Changes since v1.0.1-pre.14:
-
+No significant changes detected since v1.0.1-pre.14.
 
 ## v1.0.1-pre.14 (prerelease)
 
-Changes since v1.0.1-pre.13:
-
+No significant changes detected since v1.0.1-pre.13.
 
 ## v1.0.1-pre.13 (prerelease)
 
-Changes since v1.0.1-pre.12:
-
+No significant changes detected since v1.0.1-pre.12.
 
 ## v1.0.1-pre.12 (prerelease)
 
-Changes since v1.0.1-pre.11:
-
+No significant changes detected since v1.0.1-pre.11.
 
 ## v1.0.1-pre.11 (prerelease)
 
-Changes since v1.0.1-pre.10:
-
+No significant changes detected since v1.0.1-pre.10.
 
 ## v1.0.1-pre.10 (prerelease)
 
-Changes since v1.0.1-pre.9:
-
+No significant changes detected since v1.0.1-pre.9.
 
 ## v1.0.1-pre.9 (prerelease)
 
-Changes since v1.0.1-pre.8:
-
+No significant changes detected since v1.0.1-pre.8.
 
 ## v1.0.1-pre.8 (prerelease)
 
-Changes since v1.0.1-pre.7:
-
+No significant changes detected since v1.0.1-pre.7.
 
 ## v1.0.1-pre.7 (prerelease)
 
-Changes since v1.0.1-pre.6:
-
+No significant changes detected since v1.0.1-pre.6.
 
 ## v1.0.1-pre.6 (prerelease)
 
-Changes since v1.0.1-pre.5:
-
+No significant changes detected since v1.0.1-pre.5.
 
 ## v1.0.1-pre.5 (prerelease)
 
-Changes since v1.0.1-pre.4:
-
+No significant changes detected since v1.0.1-pre.4.
 
 ## v1.0.1-pre.4 (prerelease)
 
@@ -346,13 +338,11 @@ Changes since v1.0.1-pre.3:
 
 ## v1.0.1-pre.3 (prerelease)
 
-Changes since v1.0.1-pre.2:
-
+No significant changes detected since v1.0.1-pre.2.
 
 ## v1.0.1-pre.2 (prerelease)
 
-Changes since v1.0.1-pre.1:
-
+No significant changes detected since v1.0.1-pre.1.
 
 ## v1.0.1-pre.1 (prerelease)
 
@@ -407,13 +397,11 @@ Changes since v1.0.0-pre.13:
 
 ## v1.0.0-pre.13 (prerelease)
 
-Changes since v1.0.0-pre.12:
-
+No significant changes detected since v1.0.0-pre.12.
 
 ## v1.0.0-pre.12 (prerelease)
 
-Changes since v1.0.0-pre.11:
-
+No significant changes detected since v1.0.0-pre.11.
 
 ## v1.0.0-pre.11 (prerelease)
 
@@ -423,13 +411,11 @@ Changes since v1.0.0-pre.10:
 
 ## v1.0.0-pre.10 (prerelease)
 
-Changes since v1.0.0-pre.9:
-
+No significant changes detected since v1.0.0-pre.9.
 
 ## v1.0.0-pre.9 (prerelease)
 
-Changes since v1.0.0-pre.8:
-
+No significant changes detected since v1.0.0-pre.8.
 
 ## v1.0.0-pre.8 (prerelease)
 
@@ -439,8 +425,7 @@ Changes since v1.0.0-pre.7:
 
 ## v1.0.0-pre.7 (prerelease)
 
-Changes since v1.0.0-pre.6:
-
+No significant changes detected since v1.0.0-pre.6.
 
 ## v1.0.0-pre.6 (prerelease)
 
@@ -450,13 +435,11 @@ Changes since v1.0.0-pre.5:
 
 ## v1.0.0-pre.5 (prerelease)
 
-Changes since v1.0.0-pre.4:
-
+No significant changes detected since v1.0.0-pre.4.
 
 ## v1.0.0-pre.4 (prerelease)
 
-Changes since v1.0.0-pre.3:
-
+No significant changes detected since v1.0.0-pre.3.
 
 ## v1.0.0-pre.3 (prerelease)
 
@@ -466,8 +449,7 @@ Changes since v1.0.0-pre.2:
 
 ## v1.0.0-pre.2 (prerelease)
 
-Changes since v1.0.0-pre.1:
-
+No significant changes detected since v1.0.0-pre.1.
 
 ## v1.0.0-pre.1 (prerelease)
 
