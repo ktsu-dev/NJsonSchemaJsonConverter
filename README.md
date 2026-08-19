@@ -8,7 +8,7 @@
 [![NuGet Downloads](https://img.shields.io/nuget/dt/ktsu.NJsonSchemaJsonConverter?label=Downloads&logo=nuget)](https://nuget.org/packages/ktsu.NJsonSchemaJsonConverter)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ktsu-dev/NJsonSchemaJsonConverter?label=Commits&logo=github)](https://github.com/ktsu-dev/NJsonSchemaJsonConverter/commits/main)
 [![GitHub contributors](https://img.shields.io/github/contributors/ktsu-dev/NJsonSchemaJsonConverter?label=Contributors&logo=github)](https://github.com/ktsu-dev/NJsonSchemaJsonConverter/graphs/contributors)
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ktsu-dev/NJsonSchemaJsonConverter/dotnet.yml?label=Build&logo=github)](https://github.com/ktsu-dev/NJsonSchemaJsonConverter/actions)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ktsu-dev/NJsonSchemaJsonConverter/dotnet.yml?branch=main&label=Build&logo=github)](https://github.com/ktsu-dev/NJsonSchemaJsonConverter/actions)
 
 ## Introduction
 
