@@ -2,11 +2,13 @@
 
 > A `JsonConverterFactory` for System.Text.Json that enables seamless serialization and deserialization of NJsonSchema `JsonSchema` objects.
 
-[![License](https://img.shields.io/github/license/ktsu-dev/NJsonSchemaJsonConverter)](https://github.com/ktsu-dev/NJsonSchemaJsonConverter/blob/main/LICENSE.md)
-[![NuGet](https://img.shields.io/nuget/v/ktsu.NJsonSchemaJsonConverter.svg)](https://www.nuget.org/packages/ktsu.NJsonSchemaJsonConverter/)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/ktsu.NJsonSchemaJsonConverter.svg)](https://www.nuget.org/packages/ktsu.NJsonSchemaJsonConverter/)
-[![Build Status](https://github.com/ktsu-dev/NJsonSchemaJsonConverter/workflows/build/badge.svg)](https://github.com/ktsu-dev/NJsonSchemaJsonConverter/actions)
-[![GitHub Stars](https://img.shields.io/github/stars/ktsu-dev/NJsonSchemaJsonConverter?style=social)](https://github.com/ktsu-dev/NJsonSchemaJsonConverter/stargazers)
+[![License](https://img.shields.io/github/license/ktsu-dev/NJsonSchemaJsonConverter.svg?label=License&logo=nuget)](LICENSE.md)
+[![NuGet Version](https://img.shields.io/nuget/v/ktsu.NJsonSchemaJsonConverter?label=Stable&logo=nuget)](https://nuget.org/packages/ktsu.NJsonSchemaJsonConverter)
+[![NuGet Version](https://img.shields.io/nuget/vpre/ktsu.NJsonSchemaJsonConverter?label=Latest&logo=nuget)](https://nuget.org/packages/ktsu.NJsonSchemaJsonConverter)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/ktsu.NJsonSchemaJsonConverter?label=Downloads&logo=nuget)](https://nuget.org/packages/ktsu.NJsonSchemaJsonConverter)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ktsu-dev/NJsonSchemaJsonConverter?label=Commits&logo=github)](https://github.com/ktsu-dev/NJsonSchemaJsonConverter/commits/main)
+[![GitHub contributors](https://img.shields.io/github/contributors/ktsu-dev/NJsonSchemaJsonConverter?label=Contributors&logo=github)](https://github.com/ktsu-dev/NJsonSchemaJsonConverter/graphs/contributors)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ktsu-dev/NJsonSchemaJsonConverter/dotnet.yml?label=Build&logo=github)](https://github.com/ktsu-dev/NJsonSchemaJsonConverter/actions)
 
 ## Introduction
 
