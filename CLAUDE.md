@@ -43,8 +43,36 @@ This project uses **ktsu.Sdk**, a custom MSBuild SDK that provides standardized 
 
 Multi-targeting: net10.0, net9.0, net8.0, net7.0, net6.0, net5.0, netstandard2.0, netstandard2.1
 
+## Testing
+
+`NJsonSchemaJsonConverter.Test` uses **MSTest.Sdk** with the Microsoft Testing Platform, and targets
+`net10.0` only (it blanks the SDK's inherited `TargetFrameworks`), while the library itself
+multi-targets all eight frameworks.
+
+```bash
+dotnet test
+dotnet test --filter "FullyQualifiedName~DeserializeShouldThrowJsonExceptionForNonStringToken"
+```
+
+`NJsonSchemaJsonConverterFactoryTests` covers four areas:
+
+- **`CanConvert`** — accepts `JsonSchema`, rejects `string`, `int` and `object`.
+- **`CreateConverter`** — returns a converter for `JsonSchema`.
+- **Round-tripping a bare schema** — serialize and deserialize, both simple and with properties.
+- **Round-tripping a schema nested in a container object** — including the null-schema case in
+  both directions, which is the shape real consumers hit.
+
+Note that the suite exercises only `net10.0`. The `netstandard2.0`/`netstandard2.1` assets are
+built but never run.
+
 ## Notes
 
-- No test project currently exists
-- The converter expects schema JSON as a string value when reading (not as an embedded JSON object)
-- Uses synchronous `.Result` on async `FromJsonAsync()` - standard pattern for JsonConverter which doesn't support async
+- The converter expects schema JSON as a **string value** when reading, not an embedded JSON
+  object. `Read` checks `reader.TokenType == JsonTokenType.String` and throws `JsonException`
+  otherwise; `DeserializeShouldThrowJsonExceptionForNonStringToken` pins that.
+- `Write` uses `writer.WriteRawValue(...)`, so the schema is emitted **inline** as JSON rather
+  than as an escaped string — the two directions are deliberately asymmetric. Reading back
+  output produced by this converter therefore requires the schema to have been re-encoded as a
+  string first.
+- Uses synchronous `.Result` on async `FromJsonAsync()` — the standard pattern for a
+  `JsonConverter`, which has no async read path.
