@@ -1,6 +1,4 @@
-## v1.0.41 (patch)
+## v1.0.41
 
-Changes since v1.0.40:
-
-- [patch] Correct the stale CLAUDE.md testing notes ([@Claude](https://github.com/Claude))
+No significant changes detected since v1.0.41.
 
