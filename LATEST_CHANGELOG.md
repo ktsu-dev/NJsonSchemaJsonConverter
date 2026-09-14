@@ -1,4 +1,6 @@
-## v1.0.43
+## v1.0.44 (patch)
 
-No significant changes detected since v1.0.43.
+Changes since v1.0.43:
+
+- ci: adopt the consolidated .NET workflow [patch] ([@Claude](https://github.com/Claude))
 
