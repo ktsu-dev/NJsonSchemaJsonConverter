@@ -54,9 +54,23 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 		public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 		{
 			Ensure.NotNull(typeToConvert);
-			return reader.TokenType == JsonTokenType.String
-				? (T)(object)JsonSchema.FromJsonAsync(reader.GetString()!).Result
-				: throw new JsonException();
+			if (reader.TokenType != JsonTokenType.String)
+			{
+				throw new JsonException();
+			}
+
+			string json = reader.GetString()!;
+			try
+			{
+				return (T)(object)JsonSchema.FromJsonAsync(json).GetAwaiter().GetResult();
+			}
+			catch (Exception ex) when (ex is not JsonException)
+			{
+				// Report a schema that fails to parse as a JsonException, like any other malformed
+				// input, so callers that handle JsonException see it and System.Text.Json can add
+				// the path and position.
+				throw new JsonException("Invalid JSON schema.", ex);
+			}
 		}
 
 		/// <summary>
