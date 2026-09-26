@@ -216,6 +216,28 @@ public class NJsonSchemaJsonConverterFactoryTests
 	}
 
 	[TestMethod]
+	[DataRow("\"not a schema\"")]
+	[DataRow("\"{\\\"type\\\": \"")]
+	public void DeserializeShouldThrowJsonExceptionForInvalidSchemaText(string json)
+	{
+		JsonException exception = Assert.ThrowsExactly<JsonException>(() =>
+			JsonSerializer.Deserialize<JsonSchema>(json, SerializerOptions));
+
+		Assert.IsNotNull(exception.InnerException, "The parser's own error should be kept as the inner exception.");
+	}
+
+	[TestMethod]
+	public void DeserializeShouldThrowJsonExceptionForInvalidSchemaTextInContainer()
+	{
+		string json = """{"Name":"Bad","Schema":"not a schema"}""";
+
+		JsonException exception = Assert.ThrowsExactly<JsonException>(() =>
+			JsonSerializer.Deserialize<SchemaContainer>(json, SerializerOptions));
+
+		Assert.AreEqual("$.Schema", exception.Path);
+	}
+
+	[TestMethod]
 	public void CreateConverterShouldReturnConverterForJsonSchemaType()
 	{
 		// Act
