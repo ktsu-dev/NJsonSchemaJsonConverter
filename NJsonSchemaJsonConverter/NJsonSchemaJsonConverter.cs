@@ -67,7 +67,7 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 			catch (Exception ex) when (ex is not JsonException)
 			{
 				// Report a schema that fails to parse as a JsonException, like any other malformed
-				// input, so callers' catch (JsonException) handles it and System.Text.Json can add
+				// input, so callers that handle JsonException see it and System.Text.Json can add
 				// the path and position.
 				throw new JsonException("Invalid JSON schema.", ex);
 			}
