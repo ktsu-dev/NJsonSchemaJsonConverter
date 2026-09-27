@@ -45,7 +45,8 @@ public class NJsonSchemaJsonConverterFactoryTests
 
 		PropertyContainer? result = JsonSerializer.Deserialize<PropertyContainer>(json, SerializerOptions);
 
-		Assert.IsNotNull(result?.Property);
+		Assert.IsNotNull(result);
+		Assert.IsNotNull(result.Property);
 		Assert.AreEqual(JsonObjectType.Integer, result.Property.Type);
 	}
 
