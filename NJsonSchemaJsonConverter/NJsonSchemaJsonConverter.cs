@@ -54,12 +54,18 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 		public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 		{
 			Ensure.NotNull(typeToConvert);
-			if (reader.TokenType != JsonTokenType.String)
-			{
-				throw new JsonException();
-			}
 
-			string json = reader.GetString()!;
+			// Write emits the schema as an inline object, so accept that. Boolean schemas are valid
+			// JSON Schema too. A string token holding escaped schema text is still accepted, so data
+			// written in that form keeps loading.
+			string json = reader.TokenType switch
+			{
+				JsonTokenType.StartObject or JsonTokenType.True or JsonTokenType.False
+					=> ReadRawValue(ref reader),
+				JsonTokenType.String => reader.GetString()!,
+				_ => throw new JsonException(),
+			};
+
 			try
 			{
 				return (T)(object)JsonSchema.FromJsonAsync(json).GetAwaiter().GetResult();
@@ -71,6 +77,12 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 				// the path and position.
 				throw new JsonException("Invalid JSON schema.", ex);
 			}
+		}
+
+		private static string ReadRawValue(ref Utf8JsonReader reader)
+		{
+			using JsonDocument document = JsonDocument.ParseValue(ref reader);
+			return document.RootElement.GetRawText();
 		}
 
 		/// <summary>
