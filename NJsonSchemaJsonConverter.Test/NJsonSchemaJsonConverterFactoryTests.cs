@@ -26,6 +26,30 @@ public class NJsonSchemaJsonConverterFactoryTests
 	}
 
 	[TestMethod]
+	public void DeserializeShouldReturnJsonSchemaSubclass()
+	{
+		Assert.IsTrue(factory.CanConvert(typeof(JsonSchemaProperty)));
+		string json = JsonSerializer.Serialize("""{"type":"string","minLength":2}""");
+
+		JsonSchemaProperty? result = JsonSerializer.Deserialize<JsonSchemaProperty>(json, SerializerOptions);
+
+		Assert.IsNotNull(result);
+		Assert.AreEqual(JsonObjectType.String, result.Type);
+		Assert.AreEqual(2, result.MinLength);
+	}
+
+	[TestMethod]
+	public void DeserializeShouldReturnJsonSchemaSubclassInContainer()
+	{
+		string json = JsonSerializer.Serialize(new { Property = """{"type":"integer"}""" });
+
+		PropertyContainer? result = JsonSerializer.Deserialize<PropertyContainer>(json, SerializerOptions);
+
+		Assert.IsNotNull(result?.Property);
+		Assert.AreEqual(JsonObjectType.Integer, result.Property.Type);
+	}
+
+	[TestMethod]
 	public void CanConvertShouldReturnFalseForStringType()
 	{
 		bool result = factory.CanConvert(typeof(string));
@@ -252,4 +276,9 @@ public class SchemaContainer
 {
 	public string Name { get; set; } = string.Empty;
 	public JsonSchema? Schema { get; set; }
+}
+
+public class PropertyContainer
+{
+	public JsonSchemaProperty? Property { get; set; }
 }

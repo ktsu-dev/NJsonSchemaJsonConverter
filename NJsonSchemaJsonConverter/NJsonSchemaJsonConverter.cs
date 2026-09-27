@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using NJsonSchema;
+using NJsonSchema.Infrastructure;
 
 /// <summary>
 /// A factory for creating JSON converters for NJsonSchema types.
@@ -43,7 +44,10 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 	/// <typeparam name="T">The type of the object to convert.</typeparam>
 	[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated via reflection in CreateConverter")]
 	private sealed class NJsonSchemaJsonConverter<T> : JsonConverter<T>
+		where T : JsonSchema
 	{
+		private static readonly PropertyRenameAndIgnoreSerializerContractResolver ContractResolver = JsonSchema.CreateJsonSerializerContractResolver(SchemaType.JsonSchema);
+
 		/// <summary>
 		/// Reads and converts the JSON to the specified type.
 		/// </summary>
@@ -62,7 +66,16 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 			string json = reader.GetString()!;
 			try
 			{
-				return (T)(object)JsonSchema.FromJsonAsync(json).GetAwaiter().GetResult();
+				// Deserialize into T itself rather than JsonSchema, so a subclass such as
+				// JsonSchemaProperty comes back as that type instead of failing the cast. This is what
+				// JsonSchema.FromJsonAsync does, generalized over the target type.
+				return JsonSchemaSerialization.FromJsonAsync<T>(
+					json,
+					SchemaType.JsonSchema,
+					documentPath: null,
+					JsonReferenceResolver.CreateJsonReferenceResolverFactory(new DefaultTypeNameGenerator()),
+					ContractResolver,
+					CancellationToken.None).GetAwaiter().GetResult();
 			}
 			catch (Exception ex) when (ex is not JsonException)
 			{
