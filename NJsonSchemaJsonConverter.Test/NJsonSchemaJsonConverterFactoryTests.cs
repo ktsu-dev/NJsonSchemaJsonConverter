@@ -238,6 +238,54 @@ public class NJsonSchemaJsonConverterFactoryTests
 	}
 
 	[TestMethod]
+	public void SerializeAndDeserializeShouldRoundTripSchema()
+	{
+		JsonSchema schema = new()
+		{
+			Type = JsonObjectType.Object,
+		};
+		schema.Properties["name"] = new JsonSchemaProperty
+		{
+			Type = JsonObjectType.String,
+		};
+
+		string json = JsonSerializer.Serialize(schema, SerializerOptions);
+		JsonSchema? result = JsonSerializer.Deserialize<JsonSchema>(json, SerializerOptions);
+
+		Assert.IsNotNull(result);
+		Assert.AreEqual(JsonObjectType.Object, result.Type);
+		Assert.IsTrue(result.Properties.ContainsKey("name"));
+		Assert.AreEqual(JsonObjectType.String, result.Properties["name"].Type);
+	}
+
+	[TestMethod]
+	public void SerializeAndDeserializeShouldRoundTripSchemaInContainer()
+	{
+		JsonSchema schema = new()
+		{
+			Type = JsonObjectType.Object,
+		};
+		schema.Properties["age"] = new JsonSchemaProperty
+		{
+			Type = JsonObjectType.Integer,
+		};
+		SchemaContainer container = new()
+		{
+			Name = "Settings",
+			Schema = schema,
+		};
+
+		string json = JsonSerializer.Serialize(container, SerializerOptions);
+		SchemaContainer? result = JsonSerializer.Deserialize<SchemaContainer>(json, SerializerOptions);
+
+		Assert.IsNotNull(result);
+		Assert.AreEqual("Settings", result.Name);
+		Assert.IsNotNull(result.Schema);
+		Assert.AreEqual(JsonObjectType.Object, result.Schema.Type);
+		Assert.AreEqual(JsonObjectType.Integer, result.Schema.Properties["age"].Type);
+	}
+
+	[TestMethod]
 	public void CreateConverterShouldReturnConverterForJsonSchemaType()
 	{
 		// Act
