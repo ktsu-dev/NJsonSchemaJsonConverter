@@ -1,6 +1,8 @@
-## v1.0.51
+## v1.0.52-pre.1 (prerelease)
 
-No significant changes detected since v1.0.51.
+Changes since v1.0.51:
+
+- Bump Polyfill from 11.4.0 to 11.4.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 ## v1.0.51 (patch)
 
@@ -106,8 +108,10 @@ Changes since v1.0.35:
 Changes since v1.0.34:
 
 - Fix KTSU0002/KTSU0007: add InternalsVisibleTo for test project and Polyfill PrivateAssets [patch] ([@matt-edmondson](https://github.com/matt-edmondson))
+- Sync .github\workflows\dotnet.yml ([@KtsuTools](https://github.com/KtsuTools))
 - Sync .editorconfig ([@KtsuTools](https://github.com/KtsuTools))
 - Sync global.json ([@KtsuTools](https://github.com/KtsuTools))
+- Sync .github\workflows\dotnet.yml ([@KtsuTools](https://github.com/KtsuTools))
 
 ## v1.0.34 (patch)
 
@@ -288,12 +292,13 @@ Changes since v1.0.7:
 
 Changes since v1.0.6:
 
-- Bump Polyfill from 9.9.0 to 9.10.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Sync .github\workflows\dotnet.yml ([@KtsuTools](https://github.com/KtsuTools))
 
 ## v1.0.7-pre.1 (prerelease)
 
-No significant changes detected since v1.0.7.
+Changes since v1.0.6:
+
+- Sync .github\workflows\dotnet.yml ([@KtsuTools](https://github.com/KtsuTools))
 
 ## v1.0.6 (patch)
 
@@ -351,7 +356,9 @@ Changes since v1.0.2-pre.1:
 
 ## v1.0.2-pre.1 (prerelease)
 
-No significant changes detected since v1.0.2.
+Changes since v1.0.1:
+
+- Bump Polyfill from 9.7.7 to 9.8.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 ## v1.0.1 (patch)
 
@@ -449,7 +456,9 @@ No significant changes detected since v1.0.1-pre.1.
 
 ## v1.0.1-pre.1 (prerelease)
 
-No significant changes detected since v1.0.1.
+Changes since v1.0.0:
+
+- Sync scripts\PSBuild.psm1 ([@ktsu[bot]](https://github.com/ktsu[bot]))
 
 ## v1.0.0
 
@@ -556,7 +565,7 @@ No significant changes detected since v1.0.0-pre.1.
 
 ## v1.0.0-pre.1 (prerelease)
 
-No significant changes detected since v1.0.0.
+No significant changes detected since v0.0.1-pre.1.
 
 ## v0.0.1-pre.1 (prerelease)
 
