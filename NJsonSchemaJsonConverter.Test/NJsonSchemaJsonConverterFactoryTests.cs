@@ -4,6 +4,9 @@
 
 namespace ktsu.NJsonSchemaJsonConverter.Test;
 
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using NJsonSchema;
@@ -48,6 +51,62 @@ public class NJsonSchemaJsonConverterFactoryTests
 		Assert.IsNotNull(result);
 		Assert.IsNotNull(result.Property);
 		Assert.AreEqual(JsonObjectType.Integer, result.Property.Type);
+	}
+
+	[TestMethod]
+	public void DeserializeShouldNotFetchRemoteReference()
+	{
+		int port = GetFreeTcpPort();
+		string prefix = $"http://127.0.0.1:{port}/";
+		using HttpListener listener = new();
+		listener.Prefixes.Add(prefix);
+		listener.Start();
+
+		int hits = 0;
+		_ = Task.Run(async () =>
+		{
+			while (listener.IsListening)
+			{
+				HttpListenerContext context;
+				try
+				{
+					context = await listener.GetContextAsync().ConfigureAwait(false);
+				}
+				catch (Exception ex) when (ex is HttpListenerException or ObjectDisposedException or InvalidOperationException)
+				{
+					return;
+				}
+
+				Interlocked.Increment(ref hits);
+				byte[] body = Encoding.UTF8.GetBytes("""{"type":"integer"}""");
+				context.Response.ContentType = "application/json";
+				await context.Response.OutputStream.WriteAsync(body).ConfigureAwait(false);
+				context.Response.Close();
+			}
+		});
+
+		string json = $$"""{"$ref":"{{prefix}}remote.json"}""";
+
+		Assert.ThrowsExactly<JsonException>(() => JsonSerializer.Deserialize<JsonSchema>(json, SerializerOptions));
+		Assert.AreEqual(0, Volatile.Read(ref hits));
+	}
+
+	[TestMethod]
+	public void DeserializeShouldStillResolveLocalReference()
+	{
+		const string json = """{"definitions":{"Item":{"type":"integer"}},"properties":{"item":{"$ref":"#/definitions/Item"}}}""";
+
+		JsonSchema? result = JsonSerializer.Deserialize<JsonSchema>(json, SerializerOptions);
+
+		Assert.IsNotNull(result);
+		Assert.AreEqual(JsonObjectType.Integer, result.Properties["item"].ActualSchema.Type);
+	}
+
+	private static int GetFreeTcpPort()
+	{
+		using TcpListener probe = new(IPAddress.Loopback, 0);
+		probe.Start();
+		return ((IPEndPoint)probe.LocalEndpoint).Port;
 	}
 
 	[TestMethod]

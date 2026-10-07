@@ -110,6 +110,8 @@ The converter handles `JsonSchema` serialization in two directions:
 
 The factory uses reflection to create type-specific generic converter instances, supporting `JsonSchema` and any subclass.
 
+Deserializing never touches the network or the file system. A `$ref` that points into the same document (`#/definitions/...`) is resolved as usual. A `$ref` to an external document, such as `http://...`, `https://...` or a file path, is rejected with a `JsonException` and nothing is fetched, so a schema read from untrusted input cannot make the process issue requests.
+
 ## API Reference
 
 ### `NJsonSchemaJsonConverterFactory`
