@@ -59,13 +59,24 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 		{
 			Ensure.NotNull(typeToConvert);
 
-			// Write emits the schema as an inline object, so accept that. Boolean schemas are valid
-			// JSON Schema too. A string token holding escaped schema text is still accepted, so data
-			// written in that form keeps loading.
+			// Boolean schemas are valid JSON Schema (draft 6+), but NJsonSchema only parses an object,
+			// so they are built here: true accepts anything, false rejects everything.
+			if (reader.TokenType is JsonTokenType.True or JsonTokenType.False)
+			{
+				T schema = Activator.CreateInstance<T>();
+				if (reader.TokenType is JsonTokenType.False)
+				{
+					schema.Not = new JsonSchema();
+				}
+
+				return schema;
+			}
+
+			// Write emits the schema as an inline object, so accept that. A string token holding
+			// escaped schema text is still accepted, so data written in that form keeps loading.
 			string json = reader.TokenType switch
 			{
-				JsonTokenType.StartObject or JsonTokenType.True or JsonTokenType.False
-					=> ReadRawValue(ref reader),
+				JsonTokenType.StartObject => ReadRawValue(ref reader),
 				JsonTokenType.String => reader.GetString()!,
 				_ => throw new JsonException(),
 			};
