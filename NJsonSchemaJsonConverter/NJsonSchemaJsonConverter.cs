@@ -100,7 +100,7 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 		// path, so NJsonSchema rejects them before it would load anything.
 		private sealed class LocalOnlyJsonReferenceResolver(JsonSchemaAppender schemaAppender) : JsonReferenceResolver(schemaAppender)
 		{
-			public override Task<IJsonReference> ResolveUrlReferenceAsync(string url, CancellationToken cancellationToken) =>
+			public override Task<IJsonReference> ResolveUrlReferenceAsync(string url, CancellationToken cancellationToken = default) =>
 				throw new NotSupportedException($"Resolving the external schema reference '{url}' is not supported.");
 		}
 
