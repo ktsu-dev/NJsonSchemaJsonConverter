@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using NJsonSchema;
 using NJsonSchema.Infrastructure;
+using NJsonSchema.References;
 
 /// <summary>
 /// A factory for creating JSON converters for NJsonSchema types.
@@ -90,7 +91,7 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 					json,
 					SchemaType.JsonSchema,
 					documentPath: null,
-					JsonReferenceResolver.CreateJsonReferenceResolverFactory(new DefaultTypeNameGenerator()),
+					schema => new LocalOnlyJsonReferenceResolver(new JsonSchemaAppender(schema, new DefaultTypeNameGenerator())),
 					ContractResolver,
 					CancellationToken.None).GetAwaiter().GetResult();
 			}
@@ -101,6 +102,17 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 				// the path and position.
 				throw new JsonException("Invalid JSON schema.", ex);
 			}
+		}
+
+		// NJsonSchema's default resolver fetches an http(s) $ref over the network, blocking the
+		// deserializing thread and inlining whatever comes back. Deserializing must stay a local
+		// operation on caller-supplied input, so URL references are refused; the catch in Read
+		// reports that as a JsonException. File references need no override: Read passes no document
+		// path, so NJsonSchema rejects them before it would load anything.
+		private sealed class LocalOnlyJsonReferenceResolver(JsonSchemaAppender schemaAppender) : JsonReferenceResolver(schemaAppender)
+		{
+			public override Task<IJsonReference> ResolveUrlReferenceAsync(string url, CancellationToken cancellationToken = default) =>
+				throw new NotSupportedException($"Resolving the external schema reference '{url}' is not supported.");
 		}
 
 		private static string ReadRawValue(ref Utf8JsonReader reader)
