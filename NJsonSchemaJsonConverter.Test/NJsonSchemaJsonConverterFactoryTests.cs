@@ -51,6 +51,47 @@ public class NJsonSchemaJsonConverterFactoryTests
 	}
 
 	[TestMethod]
+	public void DeserializeTrueShouldReturnSchemaThatAcceptsAnything()
+	{
+		JsonSchema? result = JsonSerializer.Deserialize<JsonSchema>("true", SerializerOptions);
+
+		Assert.IsNotNull(result);
+		Assert.IsEmpty(result.Validate("42"));
+		Assert.IsEmpty(result.Validate("""{"a":[1,"b",null]}"""));
+	}
+
+	[TestMethod]
+	public void DeserializeFalseShouldReturnSchemaThatRejectsEverything()
+	{
+		JsonSchema? result = JsonSerializer.Deserialize<JsonSchema>("false", SerializerOptions);
+
+		Assert.IsNotNull(result);
+		Assert.IsNotEmpty(result.Validate("42"));
+		Assert.IsNotEmpty(result.Validate("{}"));
+	}
+
+	[TestMethod]
+	public void DeserializeBooleanSchemaPropertyInContainer()
+	{
+		SchemaContainer? accepting = JsonSerializer.Deserialize<SchemaContainer>("""{"Name":"a","Schema":true}""", SerializerOptions);
+		SchemaContainer? rejecting = JsonSerializer.Deserialize<SchemaContainer>("""{"Name":"b","Schema":false}""", SerializerOptions);
+
+		Assert.IsNotNull(accepting?.Schema);
+		Assert.IsEmpty(accepting.Schema.Validate("\"x\""));
+		Assert.IsNotNull(rejecting?.Schema);
+		Assert.IsNotEmpty(rejecting.Schema.Validate("\"x\""));
+	}
+
+	[TestMethod]
+	public void DeserializeBooleanSchemaReturnsSubclass()
+	{
+		PropertyContainer? result = JsonSerializer.Deserialize<PropertyContainer>("""{"Property":false}""", SerializerOptions);
+
+		Assert.IsNotNull(result?.Property);
+		Assert.IsNotEmpty(result.Property.Validate("1"));
+	}
+
+	[TestMethod]
 	public void CanConvertShouldReturnFalseForStringType()
 	{
 		bool result = factory.CanConvert(typeof(string));
