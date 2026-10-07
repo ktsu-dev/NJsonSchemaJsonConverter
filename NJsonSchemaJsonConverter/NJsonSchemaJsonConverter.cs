@@ -95,15 +95,13 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 
 		// NJsonSchema's default resolver fetches an http(s) $ref over the network, blocking the
 		// deserializing thread and inlining whatever comes back. Deserializing must stay a local
-		// operation on caller-supplied input, so external documents are refused; the catch in Read
-		// reports that as a JsonException.
+		// operation on caller-supplied input, so URL references are refused; the catch in Read
+		// reports that as a JsonException. File references need no override: Read passes no document
+		// path, so NJsonSchema rejects them before it would load anything.
 		private sealed class LocalOnlyJsonReferenceResolver(JsonSchemaAppender schemaAppender) : JsonReferenceResolver(schemaAppender)
 		{
 			public override Task<IJsonReference> ResolveUrlReferenceAsync(string url, CancellationToken cancellationToken) =>
 				throw new NotSupportedException($"Resolving the external schema reference '{url}' is not supported.");
-
-			public override Task<IJsonReference> ResolveFileReferenceAsync(string filePath, CancellationToken cancellationToken) =>
-				throw new NotSupportedException($"Resolving the external schema reference '{filePath}' is not supported.");
 		}
 
 		private static string ReadRawValue(ref Utf8JsonReader reader)

@@ -362,6 +362,23 @@ public class NJsonSchemaJsonConverterFactoryTests
 	}
 
 	[TestMethod]
+	public void DeserializeShouldNotReadFileReference()
+	{
+		string path = Path.GetTempFileName();
+		try
+		{
+			File.WriteAllText(path, """{"type":"integer"}""");
+			string json = JsonSerializer.Serialize(new Dictionary<string, string> { ["$ref"] = path });
+
+			Assert.ThrowsExactly<JsonException>(() => JsonSerializer.Deserialize<JsonSchema>(json, SerializerOptions));
+		}
+		finally
+		{
+			File.Delete(path);
+		}
+	}
+
+	[TestMethod]
 	public void DeserializeShouldStillResolveLocalReference()
 	{
 		const string json = """{"definitions":{"Item":{"type":"integer"}},"properties":{"item":{"$ref":"#/definitions/Item"}}}""";
