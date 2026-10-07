@@ -1,7 +1,9 @@
-## v1.0.53 (patch)
+## v1.0.54 (patch)
 
-Changes since v1.0.52:
+Changes since v1.0.53:
 
-- Assert each container non-null before dereferencing it in the boolean-schema tests ([@Claude](https://github.com/Claude))
-- Read boolean schemas instead of failing in NJsonSchema [patch] ([@Claude](https://github.com/Claude))
+- Keep the overridden ResolveUrlReferenceAsync's default cancellation token ([@Claude](https://github.com/Claude))
+- Drop the unreachable file-reference override and pin that file refs are rejected ([@Claude](https://github.com/Claude))
+- Move the external-reference tests to the end of the class ([@Claude](https://github.com/Claude))
+- Refuse external $ref documents instead of fetching them [patch] ([@Claude](https://github.com/Claude))
 
