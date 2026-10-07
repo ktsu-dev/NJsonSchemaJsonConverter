@@ -76,9 +76,11 @@ public class NJsonSchemaJsonConverterFactoryTests
 		SchemaContainer? accepting = JsonSerializer.Deserialize<SchemaContainer>("""{"Name":"a","Schema":true}""", SerializerOptions);
 		SchemaContainer? rejecting = JsonSerializer.Deserialize<SchemaContainer>("""{"Name":"b","Schema":false}""", SerializerOptions);
 
-		Assert.IsNotNull(accepting?.Schema);
+		Assert.IsNotNull(accepting);
+		Assert.IsNotNull(accepting.Schema);
 		Assert.IsEmpty(accepting.Schema.Validate("\"x\""));
-		Assert.IsNotNull(rejecting?.Schema);
+		Assert.IsNotNull(rejecting);
+		Assert.IsNotNull(rejecting.Schema);
 		Assert.IsNotEmpty(rejecting.Schema.Validate("\"x\""));
 	}
 
@@ -87,7 +89,8 @@ public class NJsonSchemaJsonConverterFactoryTests
 	{
 		PropertyContainer? result = JsonSerializer.Deserialize<PropertyContainer>("""{"Property":false}""", SerializerOptions);
 
-		Assert.IsNotNull(result?.Property);
+		Assert.IsNotNull(result);
+		Assert.IsNotNull(result.Property);
 		Assert.IsNotEmpty(result.Property.Validate("1"));
 	}
 
