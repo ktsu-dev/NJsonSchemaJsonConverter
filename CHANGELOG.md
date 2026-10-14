@@ -1,100 +1,106 @@
+## v1.0.55-pre.2 (prerelease)
+
+Changes since v1.0.55-pre.1:
+
+- Bump Polyfill from 11.4.3 to 11.4.5 (dependabot[bot])
+
 ## v1.0.55-pre.1 (prerelease)
 
 Changes since v1.0.54:
 
-- Bump MSTest.Sdk from 4.4.1 to 4.5.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump MSTest.Sdk from 4.4.1 to 4.5.1 (dependabot[bot])
 
 ## v1.0.54 (patch)
 
 Changes since v1.0.53:
 
-- Keep the overridden ResolveUrlReferenceAsync's default cancellation token ([@Claude](https://github.com/Claude))
-- Drop the unreachable file-reference override and pin that file refs are rejected ([@Claude](https://github.com/Claude))
-- Move the external-reference tests to the end of the class ([@Claude](https://github.com/Claude))
-- Refuse external $ref documents instead of fetching them [patch] ([@Claude](https://github.com/Claude))
+- Keep the overridden ResolveUrlReferenceAsync's default cancellation token (Claude)
+- Drop the unreachable file-reference override and pin that file refs are rejected (Claude)
+- Move the external-reference tests to the end of the class (Claude)
+- Refuse external $ref documents instead of fetching them [patch] (Claude)
 
 ## v1.0.53 (patch)
 
 Changes since v1.0.52:
 
-- Assert each container non-null before dereferencing it in the boolean-schema tests ([@Claude](https://github.com/Claude))
-- Read boolean schemas instead of failing in NJsonSchema [patch] ([@Claude](https://github.com/Claude))
+- Assert each container non-null before dereferencing it in the boolean-schema tests (Claude)
+- Read boolean schemas instead of failing in NJsonSchema [patch] (Claude)
 
 ## v1.0.53-pre.1 (prerelease)
 
 Changes since v1.0.52:
 
-- Bump Polyfill from 11.4.1 to 11.4.3 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 11.4.1 to 11.4.3 (dependabot[bot])
 
 ## v1.0.52 (patch)
 
 Changes since v1.0.51:
 
-- Move CI onto the shared ci-shared.yml pipeline ([@Claude](https://github.com/Claude))
+- Move CI onto the shared ci-shared.yml pipeline (Claude)
 
 ## v1.0.52-pre.1 (prerelease)
 
 Changes since v1.0.51:
 
-- Bump Polyfill from 11.4.0 to 11.4.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 11.4.0 to 11.4.1 (dependabot[bot])
 
 ## v1.0.51 (patch)
 
 Changes since v1.0.50:
 
-- Assert the container and its property separately in the subclass test ([@matt-edmondson](https://github.com/matt-edmondson))
-- Deserialize JsonSchema subclasses into their own type [patch] ([@matt-edmondson](https://github.com/matt-edmondson))
-- Read back the inline object that Write emits [patch] ([@matt-edmondson](https://github.com/matt-edmondson))
+- Assert the container and its property separately in the subclass test (matt-edmondson)
+- Deserialize JsonSchema subclasses into their own type [patch] (matt-edmondson)
+- Read back the inline object that Write emits [patch] (matt-edmondson)
 
 ## v1.0.50 (patch)
 
 Changes since v1.0.49:
 
-- Reword Read comment so SonarCloud does not read it as code ([@matt-edmondson](https://github.com/matt-edmondson))
-- Throw JsonException for schema text that fails to parse [patch] ([@matt-edmondson](https://github.com/matt-edmondson))
+- Reword Read comment so SonarCloud does not read it as code (matt-edmondson)
+- Throw JsonException for schema text that fails to parse [patch] (matt-edmondson)
 
 ## v1.0.49 (patch)
 
 Changes since v1.0.48:
 
-- Bump the ktsu group with 9 updates ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump the ktsu group with 9 updates (dependabot[bot])
 
 ## v1.0.48 (patch)
 
 Changes since v1.0.47:
 
-- Bump the ktsu group with 9 updates ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump the ktsu group with 9 updates (dependabot[bot])
 
 ## v1.0.47 (patch)
 
 Changes since v1.0.46:
 
-- Bump the ktsu group with 9 updates ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump the ktsu group with 9 updates (dependabot[bot])
 
 ## v1.0.46 (patch)
 
 Changes since v1.0.45:
 
-- Bump Polyfill from 11.3.0 to 11.4.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump the ktsu group with 9 updates ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 11.3.0 to 11.4.0 (dependabot[bot])
+- Bump the ktsu group with 9 updates (dependabot[bot])
 
 ## v1.0.45 (patch)
 
 Changes since v1.0.44:
 
-- Gate Dependabot auto-merge on CI actually being green ([@Claude](https://github.com/Claude))
+- Gate Dependabot auto-merge on CI actually being green (Claude)
 
 ## v1.0.44 (patch)
 
 Changes since v1.0.43:
 
-- ci: adopt the consolidated .NET workflow [patch] ([@Claude](https://github.com/Claude))
+- ci: adopt the consolidated .NET workflow [patch] (Claude)
 
 ## v1.0.43 (patch)
 
 Changes since v1.0.42:
 
-- Bump Polyfill from 11.2.0 to 11.3.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 11.2.0 to 11.3.0 (dependabot[bot])
 
 ## v1.0.42 (patch)
 
@@ -104,14 +110,14 @@ No significant changes detected since v1.0.41.
 
 Changes since v1.0.40:
 
-- [patch] Correct the stale CLAUDE.md testing notes ([@Claude](https://github.com/Claude))
+- [patch] Correct the stale CLAUDE.md testing notes (Claude)
 
 ## v1.0.40 (patch)
 
 Changes since v1.0.39:
 
-- ci: make the SonarQube quality gate opt in [patch] ([@matt-edmondson](https://github.com/matt-edmondson))
-- ci: adopt the unified dotnet workflow [patch] ([@matt-edmondson](https://github.com/matt-edmondson))
+- ci: make the SonarQube quality gate opt in [patch] (matt-edmondson)
+- ci: adopt the unified dotnet workflow [patch] (matt-edmondson)
 
 ## v1.0.39 (patch)
 
@@ -121,314 +127,314 @@ No significant changes detected since v1.0.38.
 
 Changes since v1.0.37:
 
-- Bump the ktsu group with 9 updates ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump the ktsu group with 9 updates (dependabot[bot])
 
 ## v1.0.37 (patch)
 
 Changes since v1.0.36:
 
-- Bump the ktsu group with 9 updates ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump the ktsu group with 9 updates (dependabot[bot])
 
 ## v1.0.36 (patch)
 
 Changes since v1.0.35:
 
-- chore: store icon.png in LFS as .gitattributes declares ([@matt-edmondson](https://github.com/matt-edmondson))
-- docs: scope build badge to the default branch ([@matt-edmondson](https://github.com/matt-edmondson))
-- docs: correct README, DESCRIPTION and TAGS metadata ([@matt-edmondson](https://github.com/matt-edmondson))
+- chore: store icon.png in LFS as .gitattributes declares (matt-edmondson)
+- docs: scope build badge to the default branch (matt-edmondson)
+- docs: correct README, DESCRIPTION and TAGS metadata (matt-edmondson)
 
 ## v1.0.35 (patch)
 
 Changes since v1.0.34:
 
-- Fix KTSU0002/KTSU0007: add InternalsVisibleTo for test project and Polyfill PrivateAssets [patch] ([@matt-edmondson](https://github.com/matt-edmondson))
-- Sync .github\workflows\dotnet.yml ([@KtsuTools](https://github.com/KtsuTools))
-- Sync .editorconfig ([@KtsuTools](https://github.com/KtsuTools))
-- Sync global.json ([@KtsuTools](https://github.com/KtsuTools))
-- Sync .github\workflows\dotnet.yml ([@KtsuTools](https://github.com/KtsuTools))
+- Fix KTSU0002/KTSU0007: add InternalsVisibleTo for test project and Polyfill PrivateAssets [patch] (matt-edmondson)
+- Sync .github\workflows\dotnet.yml (KtsuTools)
+- Sync .editorconfig (KtsuTools)
+- Sync global.json (KtsuTools)
+- Sync .github\workflows\dotnet.yml (KtsuTools)
 
 ## v1.0.34 (patch)
 
 Changes since v1.0.33:
 
-- chore: update ktsu.Sdk to 2.21.1 [patch] ([@matt-edmondson](https://github.com/matt-edmondson))
+- chore: update ktsu.Sdk to 2.21.1 [patch] (matt-edmondson)
 
 ## v1.0.33 (patch)
 
 Changes since v1.0.32:
 
-- Bump the ktsu group with 8 updates ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump the ktsu group with 8 updates (dependabot[bot])
 
 ## v1.0.32 (patch)
 
 Changes since v1.0.31:
 
-- Bump Polyfill from 10.11.1 to 10.11.2 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 10.11.1 to 10.11.2 (dependabot[bot])
 
 ## v1.0.31 (patch)
 
 Changes since v1.0.30:
 
-- Bump Polyfill from 10.11.0 to 10.11.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump the ktsu group with 8 updates ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 10.11.0 to 10.11.1 (dependabot[bot])
+- Bump the ktsu group with 8 updates (dependabot[bot])
 
 ## v1.0.30 (patch)
 
 Changes since v1.0.29:
 
-- Sync .github\workflows\dotnet.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync global.json ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync .github\workflows\dotnet.yml (ktsu[bot])
+- Sync global.json (ktsu[bot])
 
 ## v1.0.29 (patch)
 
 Changes since v1.0.28:
 
-- chore: trim unused centrally managed package versions ([@matt-edmondson](https://github.com/matt-edmondson))
-- Remove stale files ([@matt-edmondson](https://github.com/matt-edmondson))
-- Plan ([@matt-edmondson](https://github.com/matt-edmondson))
+- chore: trim unused centrally managed package versions (matt-edmondson)
+- Remove stale files (matt-edmondson)
+- Plan (matt-edmondson)
 
 ## v1.0.28 (patch)
 
 Changes since v1.0.27:
 
-- Sync .github\workflows\dotnet.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .github\dependabot.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .gitignore ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .gitattributes ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync global.json ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync .github\workflows\dotnet.yml (ktsu[bot])
+- Sync .github\dependabot.yml (ktsu[bot])
+- Sync .gitignore (ktsu[bot])
+- Sync .gitattributes (ktsu[bot])
+- Sync global.json (ktsu[bot])
 
 ## v1.0.27 (patch)
 
 Changes since v1.0.26:
 
-- Bump Polyfill from 10.8.0 to 10.8.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump the ktsu group with 3 updates ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 10.8.0 to 10.8.1 (dependabot[bot])
+- Bump the ktsu group with 3 updates (dependabot[bot])
 
 ## v1.0.26 (patch)
 
 Changes since v1.0.25:
 
-- Bump Polyfill from 10.7.0 to 10.8.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 10.7.0 to 10.8.0 (dependabot[bot])
 
 ## v1.0.25 (patch)
 
 Changes since v1.0.24:
 
-- Bump Polyfill from 10.6.0 to 10.7.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 10.6.0 to 10.7.0 (dependabot[bot])
 
 ## v1.0.24 (patch)
 
 Changes since v1.0.23:
 
-- Bump Polyfill from 10.5.1 to 10.6.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 10.5.1 to 10.6.0 (dependabot[bot])
 
 ## v1.0.23 (patch)
 
 Changes since v1.0.22:
 
-- Bump MSTest.Sdk from 4.2.2 to 4.2.3 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump MSTest.Sdk from 4.2.2 to 4.2.3 (dependabot[bot])
 
 ## v1.0.22 (patch)
 
 Changes since v1.0.21:
 
-- Bump Polyfill from 10.5.0 to 10.5.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 10.5.0 to 10.5.1 (dependabot[bot])
 
 ## v1.0.21 (patch)
 
 Changes since v1.0.20:
 
-- Regenerate TAGS.md with NuGet package tags ([@matt-edmondson](https://github.com/matt-edmondson))
+- Regenerate TAGS.md with NuGet package tags (matt-edmondson)
 
 ## v1.0.20 (patch)
 
 Changes since v1.0.19:
 
-- Bump Polyfill from 10.4.0 to 10.5.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 10.4.0 to 10.5.0 (dependabot[bot])
 
 ## v1.0.19 (patch)
 
 Changes since v1.0.18:
 
-- Bump Polyfill from 10.3.0 to 10.4.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 10.3.0 to 10.4.0 (dependabot[bot])
 
 ## v1.0.18 (patch)
 
 Changes since v1.0.17:
 
-- Bump MSTest.Sdk from 4.2.1 to 4.2.2 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump MSTest.Sdk from 4.2.1 to 4.2.2 (dependabot[bot])
 
 ## v1.0.17 (patch)
 
 Changes since v1.0.16:
 
-- Bump NJsonSchema from 11.6.0 to 11.6.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump NJsonSchema from 11.6.0 to 11.6.1 (dependabot[bot])
 
 ## v1.0.16 (patch)
 
 Changes since v1.0.15:
 
-- Bump Polyfill from 10.1.1 to 10.3.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 10.1.1 to 10.3.0 (dependabot[bot])
 
 ## v1.0.15 (patch)
 
 Changes since v1.0.14:
 
-- Bump Polyfill from 10.0.0 to 10.1.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 10.0.0 to 10.1.1 (dependabot[bot])
 
 ## v1.0.14 (patch)
 
 Changes since v1.0.13:
 
-- Bump NJsonSchema from 11.5.2 to 11.6.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump NJsonSchema from 11.5.2 to 11.6.0 (dependabot[bot])
 
 ## v1.0.13 (patch)
 
 Changes since v1.0.12:
 
-- Bump MSTest.Sdk from 4.1.0 to 4.2.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump MSTest.Sdk from 4.1.0 to 4.2.1 (dependabot[bot])
 
 ## v1.0.12 (patch)
 
 Changes since v1.0.11:
 
-- Bump Polyfill from 9.23.0 to 10.0.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 9.23.0 to 10.0.0 (dependabot[bot])
 
 ## v1.0.11 (patch)
 
 Changes since v1.0.10:
 
-- Bump Polyfill from 9.22.0 to 9.23.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump Polyfill from 9.18.0 to 9.22.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump Polyfill from 9.17.0 to 9.18.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump Polyfill from 9.15.0 to 9.17.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump Polyfill from 9.13.0 to 9.15.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 9.22.0 to 9.23.0 (dependabot[bot])
+- Bump Polyfill from 9.18.0 to 9.22.0 (dependabot[bot])
+- Bump Polyfill from 9.17.0 to 9.18.0 (dependabot[bot])
+- Bump Polyfill from 9.15.0 to 9.17.0 (dependabot[bot])
+- Bump Polyfill from 9.13.0 to 9.15.0 (dependabot[bot])
 
 ## v1.0.10 (patch)
 
 Changes since v1.0.9:
 
-- Bump Polyfill from 9.12.0 to 9.13.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 9.12.0 to 9.13.0 (dependabot[bot])
 
 ## v1.0.9 (patch)
 
 Changes since v1.0.8:
 
-- Bump Polyfill from 9.11.0 to 9.12.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 9.11.0 to 9.12.0 (dependabot[bot])
 
 ## v1.0.8 (patch)
 
 Changes since v1.0.7:
 
-- Bump Polyfill from 9.10.0 to 9.11.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 9.10.0 to 9.11.0 (dependabot[bot])
 
 ## v1.0.7 (patch)
 
 Changes since v1.0.6:
 
-- Sync .github\workflows\dotnet.yml ([@KtsuTools](https://github.com/KtsuTools))
+- Sync .github\workflows\dotnet.yml (KtsuTools)
 
 ## v1.0.7-pre.1 (prerelease)
 
 Changes since v1.0.6:
 
-- Sync .github\workflows\dotnet.yml ([@KtsuTools](https://github.com/KtsuTools))
+- Sync .github\workflows\dotnet.yml (KtsuTools)
 
 ## v1.0.6 (patch)
 
 Changes since v1.0.5:
 
-- Merge remote-tracking branch 'refs/remotes/origin/main' ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .github\workflows\dotnet.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Merge remote-tracking branch 'refs/remotes/origin/main' (ktsu[bot])
+- Sync .github\workflows\dotnet.yml (ktsu[bot])
 
 ## v1.0.5 (patch)
 
 Changes since v1.0.4:
 
-- Sync .github\workflows\dotnet.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .github\workflows\dotnet.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .github\workflows\dotnet.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Bump Polyfill from 9.8.1 to 9.9.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Sync .github\workflows\dotnet.yml (ktsu[bot])
+- Sync .github\workflows\dotnet.yml (ktsu[bot])
+- Sync .github\workflows\dotnet.yml (ktsu[bot])
+- Bump Polyfill from 9.8.1 to 9.9.0 (dependabot[bot])
 
 ## v1.0.4 (patch)
 
 Changes since v1.0.3:
 
-- Remove legacy build scripts ([@matt-edmondson](https://github.com/matt-edmondson))
+- Remove legacy build scripts (matt-edmondson)
 
 ## v1.0.3 (patch)
 
 Changes since v1.0.2:
 
-- Sync .github\workflows\dotnet.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync global.json ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync .github\workflows\dotnet.yml (ktsu[bot])
+- Sync global.json (ktsu[bot])
 
 ## v1.0.2 (patch)
 
 Changes since v1.0.1:
 
-- Add edge case and container tests ([@matt-edmondson](https://github.com/matt-edmondson))
-- Add serialization and deserialization tests ([@matt-edmondson](https://github.com/matt-edmondson))
-- Add CanConvert tests for NJsonSchemaJsonConverterFactory ([@matt-edmondson](https://github.com/matt-edmondson))
-- Add test project scaffold ([@matt-edmondson](https://github.com/matt-edmondson))
-- Add TAGS.md for NuGet package discoverability ([@matt-edmondson](https://github.com/matt-edmondson))
-- Update README.md with installation instructions, usage examples, and API reference ([@matt-edmondson](https://github.com/matt-edmondson))
+- Add edge case and container tests (matt-edmondson)
+- Add serialization and deserialization tests (matt-edmondson)
+- Add CanConvert tests for NJsonSchemaJsonConverterFactory (matt-edmondson)
+- Add test project scaffold (matt-edmondson)
+- Add TAGS.md for NuGet package discoverability (matt-edmondson)
+- Update README.md with installation instructions, usage examples, and API reference (matt-edmondson)
 
 ## v1.0.2-pre.3 (prerelease)
 
 Changes since v1.0.2-pre.2:
 
-- Sync scripts\PSBuild.psm1 ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync scripts\update-winget-manifests.ps1 ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync scripts\PSBuild.psm1 (ktsu[bot])
+- Sync scripts\update-winget-manifests.ps1 (ktsu[bot])
 
 ## v1.0.2-pre.2 (prerelease)
 
 Changes since v1.0.2-pre.1:
 
-- Bump Polyfill from 9.8.0 to 9.8.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump MSTest.Sdk from 4.0.2 to 4.1.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 9.8.0 to 9.8.1 (dependabot[bot])
+- Bump MSTest.Sdk from 4.0.2 to 4.1.0 (dependabot[bot])
 
 ## v1.0.2-pre.1 (prerelease)
 
 Changes since v1.0.1:
 
-- Bump Polyfill from 9.7.7 to 9.8.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 9.7.7 to 9.8.0 (dependabot[bot])
 
 ## v1.0.1 (patch)
 
 Changes since v1.0.0:
 
-- Add CLAUDE.md for project guidance and update package references in Directory.Packages.props and global.json ([@matt-edmondson](https://github.com/matt-edmondson))
-- Update configuration files and scripts for improved build and test processes ([@matt-edmondson](https://github.com/matt-edmondson))
+- Add CLAUDE.md for project guidance and update package references in Directory.Packages.props and global.json (matt-edmondson)
+- Update configuration files and scripts for improved build and test processes (matt-edmondson)
 
 ## v1.0.1-pre.18 (prerelease)
 
 Changes since v1.0.1-pre.17:
 
-- Merge remote-tracking branch 'refs/remotes/origin/main' ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync scripts\PSBuild.psm1 ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .editorconfig ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .gitattributes ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .gitignore ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .mailmap ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .runsettings ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Merge remote-tracking branch 'refs/remotes/origin/main' (ktsu[bot])
+- Sync scripts\PSBuild.psm1 (ktsu[bot])
+- Sync .editorconfig (ktsu[bot])
+- Sync .gitattributes (ktsu[bot])
+- Sync .gitignore (ktsu[bot])
+- Sync .mailmap (ktsu[bot])
+- Sync .runsettings (ktsu[bot])
 
 ## v1.0.1-pre.17 (prerelease)
 
 Changes since v1.0.1-pre.16:
 
-- Update ktsu.Extensions to 1.5.5 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Update ktsu.Extensions to 1.5.5 (dependabot[bot])
 
 ## v1.0.1-pre.16 (prerelease)
 
 Changes since v1.0.1-pre.15:
 
-- Sync scripts\PSBuild.psm1 ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .editorconfig ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .gitattributes ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .gitignore ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .mailmap ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync .runsettings ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync scripts\PSBuild.psm1 (ktsu[bot])
+- Sync .editorconfig (ktsu[bot])
+- Sync .gitattributes (ktsu[bot])
+- Sync .gitignore (ktsu[bot])
+- Sync .mailmap (ktsu[bot])
+- Sync .runsettings (ktsu[bot])
 
 ## v1.0.1-pre.15 (prerelease)
 
@@ -478,7 +484,7 @@ No significant changes detected since v1.0.1-pre.4.
 
 Changes since v1.0.1-pre.3:
 
-- Bump ktsu.Extensions from 1.5.2 to 1.5.3 in the ktsu group ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump ktsu.Extensions from 1.5.2 to 1.5.3 in the ktsu group (dependabot[bot])
 
 ## v1.0.1-pre.3 (prerelease)
 
@@ -492,54 +498,54 @@ No significant changes detected since v1.0.1-pre.1.
 
 Changes since v1.0.0:
 
-- Sync scripts\PSBuild.psm1 ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync scripts\PSBuild.psm1 (ktsu[bot])
 
 ## v1.0.0
 
 Changes since v1.0.0-pre.19:
 
-- Remove obsolete build configuration files and scripts, including Directory.Build.props, Directory.Build.targets, and various PowerShell scripts for metadata and version management. Add copyright information to NJsonSchemaJsonConverter.cs. ([@matt-edmondson](https://github.com/matt-edmondson))
-- Update project SDK to ktsu.Sdk.Lib version 1.8.0 ([@matt-edmondson](https://github.com/matt-edmondson))
-- Update packages ([@matt-edmondson](https://github.com/matt-edmondson))
-- Add LICENSE template ([@matt-edmondson](https://github.com/matt-edmondson))
+- Remove obsolete build configuration files and scripts, including Directory.Build.props, Directory.Build.targets, and various PowerShell scripts for metadata and version management. Add copyright information to NJsonSchemaJsonConverter.cs. (matt-edmondson)
+- Update project SDK to ktsu.Sdk.Lib version 1.8.0 (matt-edmondson)
+- Update packages (matt-edmondson)
+- Add LICENSE template (matt-edmondson)
 
 ## v1.0.0-pre.19 (prerelease)
 
 Changes since v1.0.0-pre.18:
 
-- Bump ktsu.Extensions from 1.3.2 to 1.4.0 in the ktsu group ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump ktsu.Extensions from 1.3.2 to 1.4.0 in the ktsu group (dependabot[bot])
 
 ## v1.0.0-pre.18 (prerelease)
 
 Changes since v1.0.0-pre.17:
 
-- Sync scripts\make-version.ps1 ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync scripts\make-changelog.ps1 ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync scripts\make-version.ps1 (ktsu[bot])
+- Sync scripts\make-changelog.ps1 (ktsu[bot])
 
 ## v1.0.0-pre.17 (prerelease)
 
 Changes since v1.0.0-pre.16:
 
-- Sync .github\workflows\dotnet.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync .github\workflows\dotnet.yml (ktsu[bot])
 
 ## v1.0.0-pre.16 (prerelease)
 
 Changes since v1.0.0-pre.15:
 
-- Sync scripts\make-version.ps1 ([@ktsu[bot]](https://github.com/ktsu[bot]))
-- Sync scripts\make-changelog.ps1 ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync scripts\make-version.ps1 (ktsu[bot])
+- Sync scripts\make-changelog.ps1 (ktsu[bot])
 
 ## v1.0.0-pre.15 (prerelease)
 
 Changes since v1.0.0-pre.14:
 
-- Sync .github\workflows\dotnet.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync .github\workflows\dotnet.yml (ktsu[bot])
 
 ## v1.0.0-pre.14 (prerelease)
 
 Changes since v1.0.0-pre.13:
 
-- Sync .github\workflows\dotnet.yml ([@ktsu[bot]](https://github.com/ktsu[bot]))
+- Sync .github\workflows\dotnet.yml (ktsu[bot])
 
 ## v1.0.0-pre.13 (prerelease)
 
@@ -553,7 +559,7 @@ No significant changes detected since v1.0.0-pre.11.
 
 Changes since v1.0.0-pre.10:
 
-- Bump MSTest from 3.7.2 to 3.7.3 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump MSTest from 3.7.2 to 3.7.3 (dependabot[bot])
 
 ## v1.0.0-pre.10 (prerelease)
 
@@ -567,7 +573,7 @@ No significant changes detected since v1.0.0-pre.8.
 
 Changes since v1.0.0-pre.7:
 
-- Bump MSTest from 3.7.1 to 3.7.2 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump MSTest from 3.7.1 to 3.7.2 (dependabot[bot])
 
 ## v1.0.0-pre.7 (prerelease)
 
@@ -577,7 +583,7 @@ No significant changes detected since v1.0.0-pre.6.
 
 Changes since v1.0.0-pre.5:
 
-- Bump coverlet.collector from 6.0.3 to 6.0.4 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump coverlet.collector from 6.0.3 to 6.0.4 (dependabot[bot])
 
 ## v1.0.0-pre.5 (prerelease)
 
@@ -591,7 +597,7 @@ No significant changes detected since v1.0.0-pre.3.
 
 Changes since v1.0.0-pre.2:
 
-- Bump MSTest from 3.7.0 to 3.7.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump MSTest from 3.7.0 to 3.7.1 (dependabot[bot])
 
 ## v1.0.0-pre.2 (prerelease)
 
@@ -603,7 +609,7 @@ No significant changes detected since v0.0.1-pre.1.
 
 ## v0.0.1-pre.1 (prerelease)
 
-- Add mailmap ([@matt-edmondson](https://github.com/matt-edmondson))
-- Add automation scripts for metadata generation and project management ([@matt-edmondson](https://github.com/matt-edmondson))
-- Initial commit ([@matt-edmondson](https://github.com/matt-edmondson))
+- Add mailmap (matt-edmondson)
+- Add automation scripts for metadata generation and project management (matt-edmondson)
+- Initial commit (matt-edmondson)
 

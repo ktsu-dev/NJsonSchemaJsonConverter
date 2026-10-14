@@ -1,6 +1,6 @@
-## v1.0.55-pre.1 (prerelease)
+## v1.0.55-pre.2 (prerelease)
 
-Changes since v1.0.54:
+Changes since v1.0.55-pre.1:
 
-- Bump MSTest.Sdk from 4.4.1 to 4.5.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump Polyfill from 11.4.3 to 11.4.5 (dependabot[bot])
 
