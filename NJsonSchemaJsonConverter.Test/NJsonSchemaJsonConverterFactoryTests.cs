@@ -277,7 +277,8 @@ public class NJsonSchemaJsonConverterFactoryTests
 
 		Assert.DoesNotContain("\n", json, "A compact document must stay on one line, as JSON Lines needs.");
 		SchemaContainer? deserialized = JsonSerializer.Deserialize<SchemaContainer>(json, SerializerOptions);
-		Assert.IsNotNull(deserialized?.Schema);
+		Assert.IsNotNull(deserialized);
+		Assert.IsNotNull(deserialized.Schema);
 		Assert.AreEqual(JsonObjectType.Integer, deserialized.Schema.Properties["id"].Type);
 	}
 
