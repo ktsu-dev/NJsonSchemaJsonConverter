@@ -19,6 +19,11 @@ public class NJsonSchemaJsonConverterFactoryTests
 		Converters = { new NJsonSchemaJsonConverterFactory() },
 	};
 
+	private static readonly JsonSerializerOptions IndentedSerializerOptions = new(SerializerOptions)
+	{
+		WriteIndented = true,
+	};
+
 	private readonly NJsonSchemaJsonConverterFactory factory = new();
 
 	[TestMethod]
@@ -254,6 +259,42 @@ public class NJsonSchemaJsonConverterFactoryTests
 		using JsonDocument doc = JsonDocument.Parse(json);
 		Assert.AreEqual("NoSchema", doc.RootElement.GetProperty("Name").GetString());
 		Assert.AreEqual(JsonValueKind.Null, doc.RootElement.GetProperty("Schema").ValueKind);
+	}
+
+	[TestMethod]
+	public void SerializeShouldWriteCompactSchemaWhenNotIndented()
+	{
+		JsonSchema schema = new()
+		{
+			Type = JsonObjectType.Object,
+		};
+		schema.Properties["id"] = new JsonSchemaProperty
+		{
+			Type = JsonObjectType.Integer,
+		};
+
+		string json = JsonSerializer.Serialize(new SchemaContainer { Name = "Line", Schema = schema }, SerializerOptions);
+
+		Assert.DoesNotContain("\n", json, "A compact document must stay on one line, as JSON Lines needs.");
+		SchemaContainer? deserialized = JsonSerializer.Deserialize<SchemaContainer>(json, SerializerOptions);
+		Assert.IsNotNull(deserialized);
+		Assert.IsNotNull(deserialized.Schema);
+		Assert.AreEqual(JsonObjectType.Integer, deserialized.Schema.Properties["id"].Type);
+	}
+
+	[TestMethod]
+	public void SerializeShouldIndentSchemaWithEnclosingDocument()
+	{
+		JsonSchema schema = new()
+		{
+			Type = JsonObjectType.Object,
+		};
+
+		string json = JsonSerializer.Serialize(new SchemaContainer { Name = "Nested", Schema = schema }, IndentedSerializerOptions);
+
+		// The schema's own members sit one level deeper than the container's "Schema" key.
+		string typeLine = json.Split('\n').Single(line => line.Contains("\"type\"", StringComparison.Ordinal));
+		Assert.StartsWith("    \"type\"", typeLine);
 	}
 
 	[TestMethod]

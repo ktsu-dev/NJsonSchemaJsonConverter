@@ -70,8 +70,9 @@ built but never run.
 - The converter expects schema JSON as a **string value** when reading, not an embedded JSON
   object. `Read` checks `reader.TokenType == JsonTokenType.String` and throws `JsonException`
   otherwise; `DeserializeShouldThrowJsonExceptionForNonStringToken` pins that.
-- `Write` uses `writer.WriteRawValue(...)`, so the schema is emitted **inline** as JSON rather
-  than as an escaped string — the two directions are deliberately asymmetric. Reading back
+- `Write` parses `ToJson()` into a `JsonDocument` and writes it through the writer, so the schema
+  is emitted **inline** as JSON rather than as an escaped string, and follows the writer's
+  `Indented` setting (compact by default, so JSON Lines output stays on one line) — the two directions are deliberately asymmetric. Reading back
   output produced by this converter therefore requires the schema to have been re-encoded as a
   string first.
 - Uses synchronous `.Result` on async `FromJsonAsync()` — the standard pattern for a

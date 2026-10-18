@@ -133,7 +133,13 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 			ArgumentNullException.ThrowIfNull(value);
 #pragma warning restore KTSU0003
 			Ensure.NotNull(writer);
-			writer.WriteRawValue(((JsonSchema)(object)value).ToJson());
+
+			// NJsonSchema's ToJson always indents, so writing its text raw would split a compact
+			// document (JSON Lines, log lines) across lines, and in an indented one would restart
+			// the schema at column 0. Re-emit it through the writer so it follows the writer's
+			// own formatting.
+			using JsonDocument document = JsonDocument.Parse(((JsonSchema)(object)value).ToJson());
+			document.WriteTo(writer);
 		}
 	}
 }
