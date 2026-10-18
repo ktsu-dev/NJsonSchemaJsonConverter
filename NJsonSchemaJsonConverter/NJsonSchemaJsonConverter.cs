@@ -87,13 +87,18 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 				// Deserialize into T itself rather than JsonSchema, so a subclass such as
 				// JsonSchemaProperty comes back as that type instead of failing the cast. This is what
 				// JsonSchema.FromJsonAsync does, generalized over the target type.
-				return JsonSchemaSerialization.FromJsonAsync<T>(
+				T? schema = JsonSchemaSerialization.FromJsonAsync<T>(
 					json,
 					SchemaType.JsonSchema,
 					documentPath: null,
 					schema => new LocalOnlyJsonReferenceResolver(new JsonSchemaAppender(schema, new DefaultTypeNameGenerator())),
 					ContractResolver,
 					CancellationToken.None).GetAwaiter().GetResult();
+
+				// Empty, whitespace-only or "null" text parses to no schema at all rather than
+				// failing. A real JSON null never reaches Read, so this is malformed input; report it
+				// here instead of leaving a null in a non-nullable property.
+				return schema ?? throw new JsonException("Invalid JSON schema.");
 			}
 			catch (Exception ex) when (ex is not JsonException)
 			{
