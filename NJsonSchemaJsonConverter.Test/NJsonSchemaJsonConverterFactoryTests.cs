@@ -299,6 +299,21 @@ public class NJsonSchemaJsonConverterFactoryTests
 	}
 
 	[TestMethod]
+	[DataRow("\"\"")]
+	[DataRow("\"   \"")]
+	[DataRow("\"null\"")]
+	public void DeserializeShouldThrowJsonExceptionForSchemaTextThatParsesToNothing(string json)
+	{
+		_ = Assert.ThrowsExactly<JsonException>(() =>
+			JsonSerializer.Deserialize<JsonSchema>(json, SerializerOptions));
+
+		JsonException exception = Assert.ThrowsExactly<JsonException>(() =>
+			JsonSerializer.Deserialize<SchemaContainer>($$"""{"Name":"Empty","Schema":{{json}}}""", SerializerOptions));
+
+		Assert.AreEqual("$.Schema", exception.Path);
+	}
+
+	[TestMethod]
 	public void DeserializeShouldThrowJsonExceptionForInvalidSchemaTextInContainer()
 	{
 		string json = """{"Name":"Bad","Schema":"not a schema"}""";
