@@ -2,6 +2,7 @@
 
 Changes since v1.0.54:
 
+- Add CompatibilitySuppressions.xml for the Polyfill 11.4.5 shim drift [patch] (#112) (matt-edmondson)
 - Assert the container and its schema non-null separately (matt-edmondson)
 - Reject schema text that parses to no schema [patch] (matt-edmondson)
 - Write schemas compact unless the writer indents [patch] (matt-edmondson)
