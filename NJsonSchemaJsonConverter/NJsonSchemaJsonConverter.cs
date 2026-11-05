@@ -143,8 +143,27 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 			// document (JSON Lines, log lines) across lines, and in an indented one would restart
 			// the schema at column 0. Re-emit it through the writer so it follows the writer's
 			// own formatting.
-			using JsonDocument document = JsonDocument.Parse(((JsonSchema)(object)value).ToJson());
+			using JsonDocument document = JsonDocument.Parse(ToJson((JsonSchema)(object)value));
 			document.WriteTo(writer);
+		}
+
+		// NJsonSchema can only write a $ref as a path into the schema being written. A sub-schema
+		// taken from a parent (JsonSchema.FromType<T>().Properties["X"]) can refer to the parent's
+		// Definitions, and ToJson then throws InvalidOperationException. Report that as a
+		// JsonException, like malformed input on the read side, so callers that handle JsonException
+		// see it and System.Text.Json can add the path of the member being written.
+		private static string ToJson(JsonSchema schema)
+		{
+			try
+			{
+				return schema.ToJson();
+			}
+			catch (InvalidOperationException ex)
+			{
+				throw new JsonException(
+					"The JSON schema could not be written. A schema that references definitions held by a parent schema must be written as part of that parent schema.",
+					ex);
+			}
 		}
 	}
 }
