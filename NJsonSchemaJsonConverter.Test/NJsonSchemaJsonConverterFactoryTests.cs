@@ -489,6 +489,36 @@ public class NJsonSchemaJsonConverterFactoryTests
 		Assert.AreEqual(JsonObjectType.Integer, result.Properties["item"].ActualSchema.Type);
 	}
 
+	[TestMethod]
+	[DataRow("""{"properties":{"a":{"$ref":"#/properties/a"}}}""")]
+	[DataRow("""{"definitions":{"A":{"$ref":"#/definitions/B"},"B":{"$ref":"#/definitions/A"}},"properties":{"x":{"$ref":"#/definitions/A"}}}""")]
+	public void DeserializeShouldThrowJsonExceptionForCyclicReferences(string schemaJson)
+	{
+		JsonException exception = Assert.ThrowsExactly<JsonException>(() =>
+			JsonSerializer.Deserialize<JsonSchema>(schemaJson, SerializerOptions));
+		Assert.IsInstanceOfType<InvalidOperationException>(exception.InnerException);
+
+		string containerJson = JsonSerializer.Serialize(new { Name = "Cyclic", Schema = schemaJson });
+		JsonException containerException = Assert.ThrowsExactly<JsonException>(() =>
+			JsonSerializer.Deserialize<SchemaContainer>(containerJson, SerializerOptions));
+		Assert.AreEqual("$.Schema", containerException.Path);
+	}
+
+	[TestMethod]
+	[DataRow("""{"properties":{"child":{"$ref":"#"}}}""")]
+	[DataRow("""{"definitions":{"N":{"type":"object","properties":{"next":{"$ref":"#/definitions/N"}}}},"properties":{"head":{"$ref":"#/definitions/N"}}}""")]
+	public void DeserializeShouldAcceptRecursiveReferences(string schemaJson)
+	{
+		JsonSchema? result = JsonSerializer.Deserialize<JsonSchema>(schemaJson, SerializerOptions);
+
+		Assert.IsNotNull(result);
+		Assert.IsEmpty(result.Validate("{}"));
+		string written = JsonSerializer.Serialize(result, SerializerOptions);
+		JsonSchema? reread = JsonSerializer.Deserialize<JsonSchema>(written, SerializerOptions);
+		Assert.IsNotNull(reread);
+		Assert.AreEqual(written, JsonSerializer.Serialize(reread, SerializerOptions));
+	}
+
 	private static int GetFreeTcpPort()
 	{
 		using TcpListener probe = new(IPAddress.Loopback, 0);
