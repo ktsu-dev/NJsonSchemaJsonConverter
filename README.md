@@ -112,6 +112,8 @@ The factory uses reflection to create type-specific generic converter instances,
 
 Deserializing never touches the network or the file system. A `$ref` that points into the same document (`#/definitions/...`) is resolved as usual. A `$ref` to an external document, such as `http://...`, `https://...` or a file path, is rejected with a `JsonException` and nothing is fetched, so a schema read from untrusted input cannot make the process issue requests.
 
+A `$ref` chain that never reaches a real schema, such as `{"properties":{"a":{"$ref":"#/properties/a"}}}` or two definitions that only point at each other, is also rejected with a `JsonException` when it is read, rather than loading and then failing on its first `Validate` or write. Valid recursion, such as `"$ref": "#"` or a definition whose property refers back to it, still loads.
+
 ## API Reference
 
 ### `NJsonSchemaJsonConverterFactory`
