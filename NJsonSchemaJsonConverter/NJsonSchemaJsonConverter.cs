@@ -9,6 +9,7 @@ using System.Text.Json.Serialization;
 using NJsonSchema;
 using NJsonSchema.Infrastructure;
 using NJsonSchema.References;
+using NJsonSchema.Visitors;
 
 /// <summary>
 /// A factory for creating JSON converters for NJsonSchema types.
@@ -64,7 +65,19 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 			// so they are built here: true accepts anything, false rejects everything.
 			if (reader.TokenType is JsonTokenType.True or JsonTokenType.False)
 			{
-				T schema = Activator.CreateInstance<T>();
+				T schema;
+				try
+				{
+					schema = Activator.CreateInstance<T>();
+				}
+				catch (MissingMethodException ex)
+				{
+					// A subclass with no public parameterless constructor can't be built here. Report
+					// it as a JsonException, as the object path does for the same type, so callers
+					// that handle JsonException see it and System.Text.Json can add the path.
+					throw new JsonException("Invalid JSON schema.", ex);
+				}
+
 				if (reader.TokenType is JsonTokenType.False)
 				{
 					schema.Not = new JsonSchema();
@@ -98,7 +111,12 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 				// Empty, whitespace-only or "null" text parses to no schema at all rather than
 				// failing. A real JSON null never reaches Read, so this is malformed input; report it
 				// here instead of leaving a null in a non-nullable property.
-				return schema ?? throw new JsonException("Invalid JSON schema.");
+				//
+				// NJsonSchema also doesn't check for reference cycles while parsing, so a $ref chain that
+				// never reaches a real schema loads fine and then throws on the first Validate or
+				// Write. Dereference every schema now, so the catch below reports it as malformed.
+				new ReferenceCycleCheck().Visit(schema ?? throw new JsonException("Invalid JSON schema."));
+				return schema;
 			}
 			catch (Exception ex) when (ex is not JsonException)
 			{
@@ -118,6 +136,17 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 		{
 			public override Task<IJsonReference> ResolveUrlReferenceAsync(string url, CancellationToken cancellationToken = default) =>
 				throw new NotSupportedException($"Resolving the external schema reference '{url}' is not supported.");
+		}
+
+		// Dereferences every schema in the graph. ActualSchema throws InvalidOperationException for
+		// a reference cycle, and returns normally for valid recursion such as "$ref": "#".
+		private sealed class ReferenceCycleCheck : JsonSchemaVisitorBase
+		{
+			protected override JsonSchema VisitSchema(JsonSchema schema, string path, string? typeNameHint)
+			{
+				_ = schema.ActualSchema;
+				return schema;
+			}
 		}
 
 		private static string ReadRawValue(ref Utf8JsonReader reader)

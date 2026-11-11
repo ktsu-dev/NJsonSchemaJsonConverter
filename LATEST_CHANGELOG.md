@@ -2,6 +2,7 @@
 
 Changes since v1.0.54:
 
+- Reject a schema whose $refs only point at each other [patch] (#121) (matt-edmondson)
 - Add CompatibilitySuppressions.xml for the Polyfill 11.4.5 shim drift [patch] (#112) (matt-edmondson)
 - Assert the container and its schema non-null separately (matt-edmondson)
 - Reject schema text that parses to no schema [patch] (matt-edmondson)
