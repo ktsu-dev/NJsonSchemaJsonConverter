@@ -114,6 +114,8 @@ Deserializing never touches the network or the file system. A `$ref` that points
 
 A `$ref` chain that never reaches a real schema, such as `{"properties":{"a":{"$ref":"#/properties/a"}}}` or two definitions that only point at each other, is also rejected with a `JsonException` when it is read, rather than loading and then failing on its first `Validate` or write. Valid recursion, such as `"$ref": "#"` or a definition whose property refers back to it, still loads.
 
+A definition name may contain `/`. Its `$ref` is written with the `/` escaped as JSON Pointer requires (`#/definitions/Foo~1Bar` for `Foo/Bar`), and either that form or the unescaped `#/definitions/Foo/Bar` that earlier versions wrote is read back as the same definition.
+
 ## API Reference
 
 ### `NJsonSchemaJsonConverterFactory`
