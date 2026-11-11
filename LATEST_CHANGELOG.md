@@ -1,10 +1,6 @@
-## v1.0.55 (patch)
+## v1.0.56 (patch)
 
-Changes since v1.0.54:
+Changes since v1.0.55:
 
-- Reject a schema whose $refs only point at each other [patch] (#121) (matt-edmondson)
-- Add CompatibilitySuppressions.xml for the Polyfill 11.4.5 shim drift [patch] (#112) (matt-edmondson)
-- Assert the container and its schema non-null separately (matt-edmondson)
-- Reject schema text that parses to no schema [patch] (matt-edmondson)
-- Write schemas compact unless the writer indents [patch] (matt-edmondson)
+- Report a boolean schema read into a type with no parameterless constructor as a JsonException [patch] (#118) (matt-edmondson)
 
