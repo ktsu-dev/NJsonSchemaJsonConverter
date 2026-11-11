@@ -509,6 +509,43 @@ public class NJsonSchemaJsonConverterFactoryTests
 	}
 
 	[TestMethod]
+	public void SerializeShouldThrowJsonExceptionForSubSchemaReferencingParentDefinitions()
+	{
+		JsonSchema generated = JsonSchema.FromType<ReferencingPerson>();
+		PropertyContainer container = new() { Property = generated.Properties[nameof(ReferencingPerson.Address)] };
+
+		JsonException exception = Assert.ThrowsExactly<JsonException>(() =>
+			JsonSerializer.Serialize(container, SerializerOptions));
+
+		Assert.IsInstanceOfType<InvalidOperationException>(exception.InnerException, "NJsonSchema's own error should be kept as the inner exception.");
+		Assert.AreEqual("$.Property", exception.Path);
+	}
+
+	[TestMethod]
+	public void SerializeShouldThrowJsonExceptionForReferenceToAnotherSchemasDefinition()
+	{
+		JsonSchema owner = new();
+		JsonSchema target = new() { Type = JsonObjectType.String };
+		owner.Definitions["Target"] = target;
+		JsonSchema referencing = new() { Reference = target };
+
+		JsonException exception = Assert.ThrowsExactly<JsonException>(() =>
+			JsonSerializer.Serialize(referencing, SerializerOptions));
+
+		Assert.IsNotNull(exception.InnerException);
+	}
+
+	[TestMethod]
+	public void SerializeShouldStillWriteGeneratedDefinitionItself()
+	{
+		JsonSchema generated = JsonSchema.FromType<ReferencingPerson>();
+
+		string json = JsonSerializer.Serialize(generated.Definitions[nameof(ReferencingAddress)], SerializerOptions);
+
+		Assert.Contains(nameof(ReferencingAddress.Street), json);
+	}
+
+	[TestMethod]
 	public void SerializeShouldHonourRaisedMaxDepthForDeeplyNestedSchema()
 	{
 		JsonSerializerOptions deepOptions = new(SerializerOptions) { MaxDepth = 512 };
@@ -597,6 +634,17 @@ public class SchemaContainer
 public class PropertyContainer
 {
 	public JsonSchemaProperty? Property { get; set; }
+}
+
+public class ReferencingPerson
+{
+	public string Name { get; set; } = string.Empty;
+	public ReferencingAddress Address { get; set; } = new();
+}
+
+public class ReferencingAddress
+{
+	public string Street { get; set; } = string.Empty;
 }
 
 public class SchemaWithoutParameterlessConstructor(int marker) : JsonSchema

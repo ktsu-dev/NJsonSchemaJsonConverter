@@ -175,8 +175,27 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 			// default document limit would otherwise refuse a deep schema the caller allowed, and
 			// the writer still enforces the caller's limit on the document as a whole.
 			JsonDocumentOptions documentOptions = new() { MaxDepth = options.MaxDepth };
-			using JsonDocument document = JsonDocument.Parse(((JsonSchema)(object)value).ToJson(), documentOptions);
+			using JsonDocument document = JsonDocument.Parse(ToJson((JsonSchema)(object)value), documentOptions);
 			document.WriteTo(writer);
+		}
+
+		// NJsonSchema can only write a $ref as a path into the schema being written. A sub-schema
+		// taken from a parent (JsonSchema.FromType<T>().Properties["X"]) can refer to the parent's
+		// Definitions, and ToJson then throws InvalidOperationException. Report that as a
+		// JsonException, like malformed input on the read side, so callers that handle JsonException
+		// see it and System.Text.Json can add the path of the member being written.
+		private static string ToJson(JsonSchema schema)
+		{
+			try
+			{
+				return schema.ToJson();
+			}
+			catch (InvalidOperationException ex)
+			{
+				throw new JsonException(
+					"The JSON schema could not be written. A schema that references definitions held by a parent schema must be written as part of that parent schema.",
+					ex);
+			}
 		}
 	}
 }
