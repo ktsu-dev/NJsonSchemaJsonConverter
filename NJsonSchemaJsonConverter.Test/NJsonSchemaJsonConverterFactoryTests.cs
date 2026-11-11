@@ -79,6 +79,25 @@ public class NJsonSchemaJsonConverterFactoryTests
 	}
 
 	[TestMethod]
+	[DataRow("true")]
+	[DataRow("false")]
+	[DataRow("{}")]
+	public void DeserializeIntoSubclassWithoutParameterlessConstructorShouldThrowJsonException(string json)
+	{
+		JsonException ex = Assert.ThrowsExactly<JsonException>(() => JsonSerializer.Deserialize<SchemaWithoutParameterlessConstructor>(json, SerializerOptions));
+
+		Assert.IsInstanceOfType<MissingMethodException>(ex.InnerException);
+	}
+
+	[TestMethod]
+	public void DeserializeBooleanIntoSubclassWithoutParameterlessConstructorShouldReportPath()
+	{
+		JsonException ex = Assert.ThrowsExactly<JsonException>(() => JsonSerializer.Deserialize<NoCtorContainer>("""{"Schema":true}""", SerializerOptions));
+
+		Assert.AreEqual("$.Schema", ex.Path);
+	}
+
+	[TestMethod]
 	public void DeserializeBooleanSchemaPropertyInContainer()
 	{
 		SchemaContainer? accepting = JsonSerializer.Deserialize<SchemaContainer>("""{"Name":"a","Schema":true}""", SerializerOptions);
@@ -523,7 +542,37 @@ public class NJsonSchemaJsonConverterFactoryTests
 
 		string json = JsonSerializer.Serialize(generated.Definitions[nameof(ReferencingAddress)], SerializerOptions);
 
-		StringAssert.Contains(json, nameof(ReferencingAddress.Street));
+		Assert.Contains(nameof(ReferencingAddress.Street), json);
+	}
+
+	[TestMethod]
+	[DataRow("""{"properties":{"a":{"$ref":"#/properties/a"}}}""")]
+	[DataRow("""{"definitions":{"A":{"$ref":"#/definitions/B"},"B":{"$ref":"#/definitions/A"}},"properties":{"x":{"$ref":"#/definitions/A"}}}""")]
+	public void DeserializeShouldThrowJsonExceptionForCyclicReferences(string schemaJson)
+	{
+		JsonException exception = Assert.ThrowsExactly<JsonException>(() =>
+			JsonSerializer.Deserialize<JsonSchema>(schemaJson, SerializerOptions));
+		Assert.IsInstanceOfType<InvalidOperationException>(exception.InnerException);
+
+		string containerJson = JsonSerializer.Serialize(new { Name = "Cyclic", Schema = schemaJson });
+		JsonException containerException = Assert.ThrowsExactly<JsonException>(() =>
+			JsonSerializer.Deserialize<SchemaContainer>(containerJson, SerializerOptions));
+		Assert.AreEqual("$.Schema", containerException.Path);
+	}
+
+	[TestMethod]
+	[DataRow("""{"properties":{"child":{"$ref":"#"}}}""")]
+	[DataRow("""{"definitions":{"N":{"type":"object","properties":{"next":{"$ref":"#/definitions/N"}}}},"properties":{"head":{"$ref":"#/definitions/N"}}}""")]
+	public void DeserializeShouldAcceptRecursiveReferences(string schemaJson)
+	{
+		JsonSchema? result = JsonSerializer.Deserialize<JsonSchema>(schemaJson, SerializerOptions);
+
+		Assert.IsNotNull(result);
+		Assert.IsEmpty(result.Validate("{}"));
+		string written = JsonSerializer.Serialize(result, SerializerOptions);
+		JsonSchema? reread = JsonSerializer.Deserialize<JsonSchema>(written, SerializerOptions);
+		Assert.IsNotNull(reread);
+		Assert.AreEqual(written, JsonSerializer.Serialize(reread, SerializerOptions));
 	}
 
 	private static int GetFreeTcpPort()
@@ -554,4 +603,14 @@ public class ReferencingPerson
 public class ReferencingAddress
 {
 	public string Street { get; set; } = string.Empty;
+}
+
+public class SchemaWithoutParameterlessConstructor(int marker) : JsonSchema
+{
+	public int Marker { get; } = marker;
+}
+
+public class NoCtorContainer
+{
+	public SchemaWithoutParameterlessConstructor? Schema { get; set; }
 }
