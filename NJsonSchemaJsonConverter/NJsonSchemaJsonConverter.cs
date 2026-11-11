@@ -295,18 +295,19 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 			{
 				string raw = string.Join("/", segments, start, end - start);
 				string unescaped = UnescapeSegment(raw);
-				foreach (string key in unescaped == raw ? [raw] : new[] { raw, unescaped })
+				string[] candidates = unescaped == raw ? [raw] : [raw, unescaped];
+				foreach ((string key, JsonNode child) in candidates
+					.Select(key => (key, child: Child(node, key)))
+					.Where(match => match.child is not null)
+					.Select(match => (match.key, match.child!)))
 				{
-					if (Child(node, key) is JsonNode child)
+					keys.Add(key);
+					if (MatchKeys(child, segments, end, keys, failed))
 					{
-						keys.Add(key);
-						if (MatchKeys(child, segments, end, keys, failed))
-						{
-							return true;
-						}
-
-						keys.RemoveAt(keys.Count - 1);
+						return true;
 					}
+
+					keys.RemoveAt(keys.Count - 1);
 				}
 			}
 
