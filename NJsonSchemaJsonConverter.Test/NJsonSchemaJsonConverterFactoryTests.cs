@@ -79,6 +79,25 @@ public class NJsonSchemaJsonConverterFactoryTests
 	}
 
 	[TestMethod]
+	[DataRow("true")]
+	[DataRow("false")]
+	[DataRow("{}")]
+	public void DeserializeIntoSubclassWithoutParameterlessConstructorShouldThrowJsonException(string json)
+	{
+		JsonException ex = Assert.ThrowsExactly<JsonException>(() => JsonSerializer.Deserialize<SchemaWithoutParameterlessConstructor>(json, SerializerOptions));
+
+		Assert.IsInstanceOfType<MissingMethodException>(ex.InnerException);
+	}
+
+	[TestMethod]
+	public void DeserializeBooleanIntoSubclassWithoutParameterlessConstructorShouldReportPath()
+	{
+		JsonException ex = Assert.ThrowsExactly<JsonException>(() => JsonSerializer.Deserialize<NoCtorContainer>("""{"Schema":true}""", SerializerOptions));
+
+		Assert.AreEqual("$.Schema", ex.Path);
+	}
+
+	[TestMethod]
 	public void DeserializeBooleanSchemaPropertyInContainer()
 	{
 		SchemaContainer? accepting = JsonSerializer.Deserialize<SchemaContainer>("""{"Name":"a","Schema":true}""", SerializerOptions);
@@ -536,4 +555,14 @@ public class SchemaContainer
 public class PropertyContainer
 {
 	public JsonSchemaProperty? Property { get; set; }
+}
+
+public class SchemaWithoutParameterlessConstructor(int marker) : JsonSchema
+{
+	public int Marker { get; } = marker;
+}
+
+public class NoCtorContainer
+{
+	public SchemaWithoutParameterlessConstructor? Schema { get; set; }
 }

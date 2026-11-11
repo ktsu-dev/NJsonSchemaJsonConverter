@@ -65,7 +65,19 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 			// so they are built here: true accepts anything, false rejects everything.
 			if (reader.TokenType is JsonTokenType.True or JsonTokenType.False)
 			{
-				T schema = Activator.CreateInstance<T>();
+				T schema;
+				try
+				{
+					schema = Activator.CreateInstance<T>();
+				}
+				catch (MissingMethodException ex)
+				{
+					// A subclass with no public parameterless constructor can't be built here. Report
+					// it as a JsonException, as the object path does for the same type, so callers
+					// that handle JsonException see it and System.Text.Json can add the path.
+					throw new JsonException("Invalid JSON schema.", ex);
+				}
+
 				if (reader.TokenType is JsonTokenType.False)
 				{
 					schema.Not = new JsonSchema();
