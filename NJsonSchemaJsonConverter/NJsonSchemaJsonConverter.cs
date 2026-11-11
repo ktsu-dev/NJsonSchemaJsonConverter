@@ -171,8 +171,11 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 			// NJsonSchema's ToJson always indents, so writing its text raw would split a compact
 			// document (JSON Lines, log lines) across lines, and in an indented one would restart
 			// the schema at column 0. Re-emit it through the writer so it follows the writer's
-			// own formatting.
-			using JsonDocument document = JsonDocument.Parse(((JsonSchema)(object)value).ToJson());
+			// own formatting. Parse at the caller's MaxDepth (0 means the default of 64): the
+			// default document limit would otherwise refuse a deep schema the caller allowed, and
+			// the writer still enforces the caller's limit on the document as a whole.
+			JsonDocumentOptions documentOptions = new() { MaxDepth = options.MaxDepth };
+			using JsonDocument document = JsonDocument.Parse(((JsonSchema)(object)value).ToJson(), documentOptions);
 			document.WriteTo(writer);
 		}
 	}
