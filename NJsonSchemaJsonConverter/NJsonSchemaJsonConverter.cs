@@ -5,7 +5,6 @@ namespace ktsu.NJsonSchemaJsonConverter;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -271,14 +270,15 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 			}
 
 			List<string> keys = [];
-			return MatchKeys(root, segments, 0, keys, new HashSet<(JsonNode, int)>(ReferenceTupleComparer.Instance))
+			return MatchKeys(root, segments, 0, keys, [])
 				? "#/" + string.Join("/", keys.Select(EscapeSegment))
 				: null;
 		}
 
 		// Finds keys that consume segments[start..] from node, each key one or more consecutive
 		// segments joined by '/', trying the fewest segments per key first. failed remembers where
-		// the rest of the pointer can't be matched, so the search stays polynomial.
+		// the rest of the pointer can't be matched, so the search stays polynomial; JsonNode keeps
+		// reference equality, so each node is its own entry.
 		private static bool MatchKeys(JsonNode node, string[] segments, int start, List<string> keys, HashSet<(JsonNode, int)> failed)
 		{
 			if (start == segments.Length)
@@ -328,17 +328,6 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 
 		private static string EscapeSegment(string key) =>
 			key.Replace("%", "%25", StringComparison.Ordinal).Replace("~", "~0", StringComparison.Ordinal).Replace("/", "~1", StringComparison.Ordinal);
-
-		private sealed class ReferenceTupleComparer : IEqualityComparer<(JsonNode Node, int Start)>
-		{
-			public static ReferenceTupleComparer Instance { get; } = new();
-
-			public bool Equals((JsonNode Node, int Start) x, (JsonNode Node, int Start) y) =>
-				ReferenceEquals(x.Node, y.Node) && x.Start == y.Start;
-
-			public int GetHashCode((JsonNode Node, int Start) obj) =>
-				HashCode.Combine(RuntimeHelpers.GetHashCode(obj.Node), obj.Start);
-		}
 
 		// NJsonSchema can only write a $ref as a path into the schema being written. A sub-schema
 		// taken from a parent (JsonSchema.FromType<T>().Properties["X"]) can refer to the parent's
