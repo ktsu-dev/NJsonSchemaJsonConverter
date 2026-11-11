@@ -12,7 +12,7 @@
     "ktsu.Sdk.Windows": "2.31.2",
     "ktsu.Sdk.Linux": "2.31.2",
     "ktsu.Sdk.macOS": "2.31.2",
-    "ktsu.Sdk.iOS": "2.31.2",
+    "ktsu.Sdk.iOS": "2.31.3",
     "ktsu.Sdk.Android": "2.31.2"
   },
   "test": {
