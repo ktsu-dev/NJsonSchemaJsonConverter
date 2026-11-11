@@ -546,6 +546,48 @@ public class NJsonSchemaJsonConverterFactoryTests
 	}
 
 	[TestMethod]
+	public void SerializeShouldHonourRaisedMaxDepthForDeeplyNestedSchema()
+	{
+		JsonSerializerOptions deepOptions = new(SerializerOptions) { MaxDepth = 512 };
+		JsonSchema schema = CreateNestedSchema(40);
+
+		string json = JsonSerializer.Serialize(schema, deepOptions);
+		JsonSchema? result = JsonSerializer.Deserialize<JsonSchema>(json, deepOptions);
+
+		Assert.IsNotNull(result);
+		JsonSchema current = result;
+		for (int level = 0; level < 40; level++)
+		{
+			current = current.Properties["c"];
+		}
+
+		Assert.AreEqual(JsonObjectType.Object, current.Type);
+	}
+
+	[TestMethod]
+	public void SerializeShouldStillThrowJsonExceptionForDeeplyNestedSchemaWithDefaultMaxDepth()
+	{
+		JsonSchema schema = CreateNestedSchema(40);
+
+		_ = Assert.Throws<JsonException>(() => JsonSerializer.Serialize(schema, SerializerOptions));
+	}
+
+	// Each nested object property adds two JSON levels ("properties", then the property name).
+	private static JsonSchema CreateNestedSchema(int levels)
+	{
+		JsonSchema root = new() { Type = JsonObjectType.Object };
+		JsonSchema current = root;
+		for (int level = 0; level < levels; level++)
+		{
+			JsonSchemaProperty child = new() { Type = JsonObjectType.Object };
+			current.Properties["c"] = child;
+			current = child;
+		}
+
+		return root;
+	}
+
+	[TestMethod]
 	[DataRow("""{"properties":{"a":{"$ref":"#/properties/a"}}}""")]
 	[DataRow("""{"definitions":{"A":{"$ref":"#/definitions/B"},"B":{"$ref":"#/definitions/A"}},"properties":{"x":{"$ref":"#/definitions/A"}}}""")]
 	public void DeserializeShouldThrowJsonExceptionForCyclicReferences(string schemaJson)
