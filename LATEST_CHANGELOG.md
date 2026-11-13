@@ -1,8 +1,6 @@
-## v1.0.58-pre.1 (prerelease)
+## v1.0.58 (patch)
 
 Changes since v1.0.57:
 
-- Bump ktsu.Sdk and 8 others (dependabot[bot])
-- Bump NJsonSchema from 11.6.1 to 11.6.2 (dependabot[bot])
-- Bump MSTest.Sdk from 4.5.2 to 4.5.3 (dependabot[bot])
+- Escape a '/' in a definition name when writing its $ref [patch] (#124) (matt-edmondson)
 
