@@ -3,8 +3,10 @@
 namespace ktsu.NJsonSchemaJsonConverter;
 
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using NJsonSchema;
 using NJsonSchema.Infrastructure;
@@ -100,8 +102,12 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 				// Deserialize into T itself rather than JsonSchema, so a subclass such as
 				// JsonSchemaProperty comes back as that type instead of failing the cast. This is what
 				// JsonSchema.FromJsonAsync does, generalized over the target type.
+				//
+				// A $ref to a definition whose name holds a '/' only resolves with the '/' escaped as
+				// "~1". Earlier versions of Write left it unescaped, so escape such pointers here,
+				// letting the data they saved load again.
 				T? schema = JsonSchemaSerialization.FromJsonAsync<T>(
-					json,
+					EscapeLocalReferences(json, options.MaxDepth),
 					SchemaType.JsonSchema,
 					documentPath: null,
 					schema => new LocalOnlyJsonReferenceResolver(new JsonSchemaAppender(schema, new DefaultTypeNameGenerator())),
@@ -174,10 +180,154 @@ public class NJsonSchemaJsonConverterFactory : JsonConverterFactory
 			// own formatting. Parse at the caller's MaxDepth (0 means the default of 64): the
 			// default document limit would otherwise refuse a deep schema the caller allowed, and
 			// the writer still enforces the caller's limit on the document as a whole.
+			//
+			// ToJson writes a $ref to a definition named "Foo/Bar" as "#/definitions/Foo/Bar", which
+			// reads as a path through "Foo" to "Bar". Escape it as JSON Pointer requires, so the
+			// schema can be read back.
 			JsonDocumentOptions documentOptions = new() { MaxDepth = options.MaxDepth };
-			using JsonDocument document = JsonDocument.Parse(ToJson((JsonSchema)(object)value), documentOptions);
+			using JsonDocument document = JsonDocument.Parse(EscapeLocalReferences(ToJson((JsonSchema)(object)value), options.MaxDepth), documentOptions);
 			document.WriteTo(writer);
 		}
+
+		// Rewrites each local "$ref" in a schema document that doesn't resolve as a JSON Pointer
+		// (RFC 6901) but does once some of its '/' separators are read as part of a key, as they are
+		// in "#/definitions/Foo/Bar" for a definition named "Foo/Bar". The rewritten pointer escapes
+		// '%', '~' and '/' in each key ("#/definitions/Foo~1Bar"), which NJsonSchema decodes back to
+		// the key after splitting the pointer. Pointers that already resolve, or that can't be
+		// resolved either way, are left as they are, and the text is returned unchanged when no
+		// pointer needed rewriting.
+		private static string EscapeLocalReferences(string json, int maxDepth)
+		{
+			if (!json.Contains("\"$ref\"", StringComparison.Ordinal))
+			{
+				return json;
+			}
+
+			JsonDocumentOptions documentOptions = new() { MaxDepth = maxDepth };
+			JsonNode? root = JsonNode.Parse(json, nodeOptions: null, documentOptions);
+			if (root is null)
+			{
+				return json;
+			}
+
+			bool changed = false;
+			EscapeLocalReferences(root, root, ref changed);
+			return changed ? root.ToJsonString() : json;
+		}
+
+		private static void EscapeLocalReferences(JsonNode root, JsonNode? node, ref bool changed)
+		{
+			if (node is JsonObject jsonObject)
+			{
+				foreach (KeyValuePair<string, JsonNode?> property in jsonObject.ToList())
+				{
+					if (property.Key == "$ref"
+						&& property.Value is JsonValue value
+						&& value.TryGetValue(out string? pointer)
+						&& EscapeLocalPointer(root, pointer) is string escaped)
+					{
+						jsonObject["$ref"] = escaped;
+						changed = true;
+					}
+					else
+					{
+						EscapeLocalReferences(root, property.Value, ref changed);
+					}
+				}
+			}
+			else if (node is JsonArray jsonArray)
+			{
+				foreach (JsonNode? item in jsonArray)
+				{
+					EscapeLocalReferences(root, item, ref changed);
+				}
+			}
+		}
+
+		// Returns the escaped form of a local pointer that only resolves with some separators read as
+		// part of a key, or null when it needs no rewriting or can't be resolved.
+		private static string? EscapeLocalPointer(JsonNode root, string pointer)
+		{
+			if (!pointer.StartsWith("#/", StringComparison.Ordinal))
+			{
+				return null;
+			}
+
+			string[] segments = pointer[2..].Split('/');
+			JsonNode? node = root;
+			foreach (string segment in segments)
+			{
+				node = Child(node, UnescapeSegment(segment));
+				if (node is null)
+				{
+					break;
+				}
+			}
+
+			if (node is not null)
+			{
+				return null;
+			}
+
+			List<string> keys = [];
+			return MatchKeys(root, segments, 0, keys, [])
+				? "#/" + string.Join("/", keys.Select(EscapeSegment))
+				: null;
+		}
+
+		// Finds keys that consume segments[start..] from node, each key one or more consecutive
+		// segments joined by '/', trying the fewest segments per key first. failed remembers where
+		// the rest of the pointer can't be matched, so the search stays polynomial; JsonNode keeps
+		// reference equality, so each node is its own entry.
+		private static bool MatchKeys(JsonNode node, string[] segments, int start, List<string> keys, HashSet<(JsonNode, int)> failed)
+		{
+			if (start == segments.Length)
+			{
+				return true;
+			}
+
+			if (failed.Contains((node, start)))
+			{
+				return false;
+			}
+
+			for (int end = start + 1; end <= segments.Length; end++)
+			{
+				string raw = string.Join("/", segments, start, end - start);
+				string unescaped = UnescapeSegment(raw);
+				string[] candidates = unescaped == raw ? [raw] : [raw, unescaped];
+				foreach ((string key, JsonNode child) in candidates
+					.Select(key => (key, child: Child(node, key)))
+					.Where(match => match.child is not null)
+					.Select(match => (match.key, match.child!)))
+				{
+					keys.Add(key);
+					if (MatchKeys(child, segments, end, keys, failed))
+					{
+						return true;
+					}
+
+					keys.RemoveAt(keys.Count - 1);
+				}
+			}
+
+			failed.Add((node, start));
+			return false;
+		}
+
+		private static JsonNode? Child(JsonNode? node, string key) => node switch
+		{
+			JsonObject jsonObject => jsonObject.TryGetPropertyValue(key, out JsonNode? child) ? child : null,
+			JsonArray jsonArray => int.TryParse(key, NumberStyles.None, CultureInfo.InvariantCulture, out int index) && index < jsonArray.Count ? jsonArray[index] : null,
+			_ => null,
+		};
+
+		// Decodes a pointer segment as NJsonSchema's resolver does.
+		private static string UnescapeSegment(string segment) =>
+			Uri.UnescapeDataString(segment).Replace("~1", "/", StringComparison.Ordinal).Replace("~0", "~", StringComparison.Ordinal);
+
+		private static string EscapeSegment(string key) =>
+			key.Replace("%", "%25", StringComparison.Ordinal).Replace("~", "~0", StringComparison.Ordinal).Replace("/", "~1", StringComparison.Ordinal);
 
 		// NJsonSchema can only write a $ref as a path into the schema being written. A sub-schema
 		// taken from a parent (JsonSchema.FromType<T>().Properties["X"]) can refer to the parent's

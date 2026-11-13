@@ -617,6 +617,43 @@ public class NJsonSchemaJsonConverterFactoryTests
 		Assert.AreEqual(written, JsonSerializer.Serialize(reread, SerializerOptions));
 	}
 
+	[TestMethod]
+	[DataRow("Foo/Bar")]
+	[DataRow("a~b/c")]
+	[DataRow("api/v1/User")]
+	[DataRow("50%/off")]
+	[DataRow("a%20b")]
+	[DataRow("Name Space/Type")]
+	public void SerializeShouldRoundTripDefinitionNamesContainingSlash(string name)
+	{
+		JsonSchema definition = new() { Type = JsonObjectType.String };
+		JsonSchema root = new() { Type = JsonObjectType.Object };
+		root.Definitions[name] = definition;
+		root.Properties["p"] = new JsonSchemaProperty { Reference = definition };
+
+		string json = JsonSerializer.Serialize(root, SerializerOptions);
+		JsonSchema? result = JsonSerializer.Deserialize<JsonSchema>(json, SerializerOptions);
+
+		Assert.IsNotNull(result);
+		Assert.AreSame(result.Definitions[name], result.Properties["p"].ActualSchema);
+		Assert.AreEqual(json, JsonSerializer.Serialize(result, SerializerOptions));
+	}
+
+	[TestMethod]
+	[DataRow("#/definitions/a~1b", "a/b")]
+	[DataRow("#/definitions/a~0~1b", "a~/b")]
+	[DataRow("#/definitions/a~01b", "a~1b")]
+	[DataRow("#/definitions/a/b", "a/b")]
+	public void DeserializeShouldResolveReferencesToDefinitionNamesContainingSlash(string reference, string name)
+	{
+		string json = """{"definitions":{""" + JsonSerializer.Serialize(name) + """:{"type":"string"},"other":{"type":"integer"}},"properties":{"p":{"$ref":""" + JsonSerializer.Serialize(reference) + "}}}";
+
+		JsonSchema? result = JsonSerializer.Deserialize<JsonSchema>(json, SerializerOptions);
+
+		Assert.IsNotNull(result);
+		Assert.AreSame(result.Definitions[name], result.Properties["p"].ActualSchema);
+	}
+
 	private static int GetFreeTcpPort()
 	{
 		using TcpListener probe = new(IPAddress.Loopback, 0);
