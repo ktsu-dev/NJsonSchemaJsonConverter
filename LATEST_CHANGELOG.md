@@ -1,6 +1,6 @@
-## v1.0.58 (patch)
+## v1.0.59-pre.1 (prerelease)
 
-Changes since v1.0.57:
+Changes since v1.0.58:
 
-- Escape a '/' in a definition name when writing its $ref [patch] (#124) (matt-edmondson)
+- Bump the ktsu group with 9 updates (dependabot[bot])
 
